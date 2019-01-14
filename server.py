@@ -167,6 +167,7 @@ def univariate_taskstatus(task_id):
         if 'result' in task.info:
             response['result'] = task.info['result']
     else:
+        ss
         # something went wrong in the background job
         response = {
             'state': task.state,
