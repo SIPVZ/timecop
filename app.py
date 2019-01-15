@@ -202,7 +202,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
                             'finish': 0 })
     if not train:
 
-        (model_name,model,params)=get_best_model('winner_'+name)
+        (model_name,model,params)=db.get_best_model('winner_'+name)
         # print ("recupero el motor " )
         winner= model_name
         if winner == 'LSTM':
