@@ -89,7 +89,7 @@ def univariate_engine():
 
 
 @server.route('/back_univariate', methods=['POST'])
-def univariate_engine():
+def back_univariate_engine():
     db.init_database()
 
     if not request.json:
@@ -167,7 +167,7 @@ def univariate_taskstatus(task_id):
         if 'result' in task.info:
             response['result'] = task.info['result']
     else:
-        
+
         # something went wrong in the background job
         response = {
             'state': task.state,
@@ -356,4 +356,4 @@ def index():
 
 if __name__ == '__main__':
     db.init_database()
-    app.run(host = '0.0.0.0',port=PORT)
+    server.run(host = '0.0.0.0',port=PORT)
