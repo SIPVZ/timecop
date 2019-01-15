@@ -34,7 +34,7 @@ main.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
 
 # Initialize Celery
 celery = Celery(main.name, broker=main.config['CELERY_BROKER_URL'])
-broker=main.config['CELERY_BROKER_URL'])
+#broker=main.config['CELERY_BROKER_URL'])
 
 celery.conf.update(main.config)
 
@@ -137,7 +137,7 @@ def back_univariate_engine():
     print (name )
 
     print ("invoco el backend")
-    salida = model_univariate.s(lista_datos=lista,num_fut=num_fut,desv_mse=desv_mae,train=train,name=name).apply_async()
+    salida = back_model_univariate.s(lista_datos=lista,num_fut=num_fut,desv_mse=desv_mae,train=train,name=name).apply_async()
 
     print (salida.id)
 
@@ -148,7 +148,7 @@ def back_univariate_engine():
 
 @main.route('/back_univariate_status/<task_id>')
 def univariate_taskstatus(task_id):
-    task = model_univariate.AsyncResult(task_id)
+    task = back_model_univariate.AsyncResult(task_id)
     print ("llega aqui")
     print (task)
 
