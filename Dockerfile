@@ -18,8 +18,9 @@ RUN pip3 install pyramid-arima
 RUN pip3 install tensorflow
 RUN pip3 install -U statsmodels
 RUN pip3 install celery
+RUN pip install redis
 RUN service redis-server start
-RUN celery worker -A server.celery --loglevel=info &
+RUN celery worker -A main.celery --loglevel=info &
 
 
 COPY ./config/timeout.conf /etc/nginx/conf.d/

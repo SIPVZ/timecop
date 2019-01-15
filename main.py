@@ -17,27 +17,29 @@ from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 
 
-server = Flask(__name__)
-CORS(server)
+main = Flask(__name__)
+CORS(main)
 
 
-server.config.from_pyfile(os.path.join(".", "config/app.cfg"), silent=False)
+main.config.from_pyfile(os.path.join(".", "config/app.cfg"), silent=False)
 
 db.init_database()
 
-DB_NAME= server.config.get("DB_NAME")
-PORT = server.config.get("PORT")
+DB_NAME= main.config.get("DB_NAME")
+PORT = main.config.get("PORT")
 
 # Celery configuration
-server.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
-server.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+main.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+main.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
 
 # Initialize Celery
-celery = Celery(server.name, broker=server.config['CELERY_BROKER_URL'])
-celery.conf.update(server.config)
+celery = Celery(main.name, broker=main.config['CELERY_BROKER_URL'])
+broker=main.config['CELERY_BROKER_URL'])
+
+celery.conf.update(main.config)
 
 
-@server.route('/univariate', methods=['POST'])
+@main.route('/univariate', methods=['POST'])
 def univariate_engine():
     db.init_database()
 
@@ -88,7 +90,7 @@ def univariate_engine():
     return jsonify(salida), 201
 
 
-@server.route('/back_univariate', methods=['POST'])
+@main.route('/back_univariate', methods=['POST'])
 def back_univariate_engine():
     db.init_database()
 
@@ -144,7 +146,7 @@ def back_univariate_engine():
     return jsonify(valor), 200
     #return jsonify(salida), 201
 
-@server.route('/back_univariate_status/<task_id>')
+@main.route('/back_univariate_status/<task_id>')
 def univariate_taskstatus(task_id):
     task = model_univariate.AsyncResult(task_id)
     print ("llega aqui")
@@ -187,7 +189,7 @@ def univariate_taskstatus(task_id):
 
 
 @celery.task(bind=True)
-def model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
+def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     engines_output={}
     debug = {}
 
@@ -293,7 +295,7 @@ def model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
 
 
-@server.route('/multivariate', methods=['POST'])
+@main.route('/multivariate', methods=['POST'])
 def multivariate_engine():
     if not request.json:
         abort(400)
@@ -350,10 +352,10 @@ def multivariate_engine():
     return jsonify(salida), 201
 
 
-@server.route('/')
+@main.route('/')
 def index():
     return "Timecop ready to play"
 
 if __name__ == '__main__':
     db.init_database()
-    server.run(host = '0.0.0.0',port=PORT)
+    main.run(host = '0.0.0.0',port=PORT)
