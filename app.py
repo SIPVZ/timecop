@@ -3,7 +3,7 @@ from flask_cors import CORS
 import json
 
 import engines.functions_timeseries as ft
-import engines.BBDD as db,new_model
+import engines.BBDD as db
 import os
 from celery import Celery
 
@@ -288,7 +288,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
                 winner=key
             print(winner)
 
-        new_model('winner_'+name, winner, pack('N', 365),'',0)
+        db.new_model('winner_'+name, winner, pack('N', 365),'',0)
 
 
         print (winner)
