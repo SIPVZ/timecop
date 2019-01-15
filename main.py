@@ -3,7 +3,7 @@ from flask_cors import CORS
 import json
 
 import engines.functions_timeseries as ft
-import engines.BBDD as db
+import engines.BBDD as db,new_model
 import os
 from celery import Celery
 
@@ -193,9 +193,13 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     engines_output={}
     debug = {}
 
+    temp_info = {}
+
     self.update_state(state='PROGRESS',
                       meta={'running': 'LSTM',
-                            'status': ''})
+                            'status': '',
+                            'total': 4,
+                            'finish': 0 })
     if not train:
 
         (model_name,model,params)=get_best_model('winner_'+name)
@@ -225,9 +229,10 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         except Exception as e:
             print(e)
             print ('ERROR: exception executing LSTM univariate')
+        temp_info['LSTM']=engines_output['LSTM']
         self.update_state(state='PROGRESS',
                   meta={'running': 'LSTM',
-                        'status': engines_output['LSTM']})
+                        'status': temp_info})
 
         #try:
             #if (len(lista_datos) > 100):
@@ -249,9 +254,10 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         except  Exception as e:
             print(e)
             print ('ERROR: exception executing VAR')
+        temp_info['VAR'] = engines_output['VAR']
         self.update_state(state='PROGRESS',
                   meta={'running': 'VAR',
-                        'status': engines_output['VAR']})
+                        'status': temp_info})
 
         try:
                if (train ):
@@ -264,9 +270,10 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         except  Exception as e:
                print(e)
                print ('ERROR: exception executing Holtwinters')
+        temp_info['Holtwinters'] = engines_output['Holtwinters']
         self.update_state(state='PROGRESS',
                   meta={'running': 'Holtwinters',
-                        'status': engines_output['Holtwinters']})
+                        'status': temp_info})
 
 
         best_mae=999999999
