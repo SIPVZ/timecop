@@ -16,6 +16,8 @@ from engines.holtwinter import anomaly_holt,forecast_holt
 from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 
+from struct import *
+
 
 app = Flask(__name__)
 CORS(app)
