@@ -23,3 +23,4 @@ RUN service redis-server start
 
 
 COPY ./config/timeout.conf /etc/nginx/conf.d/
+RUN chmod -R g=u /etc/passwd /app
