@@ -161,15 +161,31 @@ def univariate_taskstatus(task_id):
             'total': 1,
             'status': 'Pending...'
         }
+    if task.state == 'PROGRESS':
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'status': task.info.get('status', 'Running...')
+        }
+    if task.state == 'SUCCESS':
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'result': task.info.get('result', ''),
+            'status': task.info.get('status', 'Running...')
+        }
+
     elif task.state != 'FAILURE':
         response = {
             'state': task.state,
             'current': task.info.get('current', 0),
             'total': task.info.get('total', 1),
-            'status': task.info.get('status', '')
+            'status': task.info.get('status', ''),
+            'result': task.info.get('result', ''),
+            'response': task.info
         }
-        if 'result' in task.info:
-            response['result'] = task.info['result']
     else:
 
         # something went wrong in the background job
@@ -178,7 +194,7 @@ def univariate_taskstatus(task_id):
             'current': 1,
             'total': 1,
             'status': str(task.info),  # this is the exception raised
-            'result': task.info['result']
+            'result': task.info
         }
     print (task.state)
     print(task.info)
@@ -233,18 +249,26 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             print ('ERROR: exception executing LSTM univariate')
         temp_info['LSTM']=engines_output['LSTM']
         self.update_state(state='PROGRESS',
-                  meta={'running': 'LSTM',
-                        'status': temp_info})
+                  meta={'running': 'anomaly_AutoArima',
+                        'status': temp_info,
+                        'total': 4,
+                        'finish': 1})
 
-        #try:
-            #if (len(lista_datos) > 100):
-                ##new_length=
-                #lista_datos_ari=lista_datos[len(lista_datos)-100:]
-            #engines_output['arima'] = anomaly_AutoArima(lista_datos_ari,num_fut,len(lista_datos),desv_mse)
-            #debug['arima'] = engines_output['arima']['debug']
-        #except  Exception as e:
-            #print(e)
-            #print ('ERROR: exception executing Autoarima')
+        try:
+            if (len(lista_datos) > 100):
+                #new_length=
+                lista_datos_ari=lista_datos[len(lista_datos)-100:]
+            engines_output['arima'] = anomaly_AutoArima(lista_datos_ari,num_fut,len(lista_datos),desv_mse)
+            debug['arima'] = engines_output['arima']['debug']
+            temp_info['arima']=engines_output['arima']
+            self.update_state(state='PROGRESS',
+                      meta={'running': 'VAR',
+                            'status': temp_info,
+                            'total': 4,
+                            'finish': 2})
+        except  Exception as e:
+            print(e)
+            print ('ERROR: exception executing Autoarima')
 
         try:
             if (train):
@@ -258,8 +282,10 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             print ('ERROR: exception executing VAR')
         temp_info['VAR'] = engines_output['VAR']
         self.update_state(state='PROGRESS',
-                  meta={'running': 'VAR',
-                        'status': temp_info})
+                  meta={'running': 'Holtwinters',
+                        'status': temp_info,
+                        'total': 4,
+                        'finish': 3})
 
         try:
                if (train ):
@@ -275,7 +301,9 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         temp_info['Holtwinters'] = engines_output['Holtwinters']
         self.update_state(state='PROGRESS',
                   meta={'running': 'Holtwinters',
-                        'status': temp_info})
+                        'status': temp_info,
+                        'total': 4,
+                        'finish': 4})
 
 
         best_mae=999999999
