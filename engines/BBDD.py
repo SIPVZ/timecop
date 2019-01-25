@@ -8,6 +8,13 @@ from sqlalchemy.orm import sessionmaker
 from struct import *
 from sqlalchemy.sql import *
 import datetime
+import pandas as pd
+
+from collections import defaultdict
+
+from sqlalchemy.inspection import inspect
+
+
 
 
 Base = declarative_base()
@@ -133,8 +140,9 @@ def get_all_models(name):
 
     query = session.query(Model).all()
     df = pd.DataFrame(query_to_dict(query))
-    df.drop('TS_model')
-    return (df)
+    df.drop('TS_model',axis=1,inplace=True)
+    return (df[['TS_name', 'TS_winner_name','TS_update']])
+
 
 
 def get_winners(name):
@@ -154,5 +162,5 @@ def get_winners(name):
     winner_model_type = session.query(Model).filter(Model.TS_name.like('winner%')).order_by(desc('TS_update')).all()
 
     df = pd.DataFrame(query_to_dict(winner_model_type))
-    df.drop('TS_model')
-    return (df)
+    df.drop('TS_model',axis=1,inplace=True)
+    return (df[['TS_name', 'TS_winner_name','TS_update']])

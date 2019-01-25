@@ -401,15 +401,15 @@ def multivariate_engine():
 
 
 @app.route('/monitoring')
-def index():
+def monitoring():
     data_models= db.get_all_models(' ')
-    return jsonify(data_models),201
+    return jsonify(data_models.to_dict(orient='record')),201
 
 
 @app.route('/monitoring_winners')
-def index():
+def monitoring_winners():
     data_models= db.get_winners(' ')
-    return jsonify(data_models),201
+    return jsonify(data_models.to_dict(orient='record')),201
 
 
 @app.route('/')
