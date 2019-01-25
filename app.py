@@ -251,15 +251,16 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         try:
             engines_output['LSTM'] = anomaly_uni_LSTM(lista_datos,num_fut,desv_mse,train,name)
             debug['LSTM'] = engines_output['LSTM']['debug']
+            temp_info['LSTM']=engines_output['LSTM']
+            self.update_state(state='PROGRESS',
+                      meta={'running': 'anomaly_AutoArima',
+                            'status': temp_info,
+                            'total': 4,
+                            'finish': 1})
         except Exception as e:
             print(e)
             print ('ERROR: exception executing LSTM univariate')
-        temp_info['LSTM']=engines_output['LSTM']
-        self.update_state(state='PROGRESS',
-                  meta={'running': 'anomaly_AutoArima',
-                        'status': temp_info,
-                        'total': 4,
-                        'finish': 1})
+
 
         try:
             if (len(lista_datos) > 100):
@@ -284,33 +285,36 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             else:
                 engines_output['VAR'] = univariate_forecast_VAR(lista_datos,num_fut,name)
                 debug['VAR'] = engines_output['VAR']['debug']
+            temp_info['VAR'] = engines_output['VAR']
+            self.update_state(state='PROGRESS',
+                      meta={'running': 'Holtwinters',
+                            'status': temp_info,
+                            'total': 4,
+                            'finish': 3})
+
         except  Exception as e:
             print(e)
             print ('ERROR: exception executing VAR')
-        temp_info['VAR'] = engines_output['VAR']
-        self.update_state(state='PROGRESS',
-                  meta={'running': 'Holtwinters',
-                        'status': temp_info,
-                        'total': 4,
-                        'finish': 3})
 
         try:
-               if (train ):
+            if (train ):
                    engines_output['Holtwinters'] = anomaly_holt(lista_datos,num_fut,desv_mse,name)
                    debug['Holtwinters'] = engines_output['Holtwinters']['debug']
-               else:
+            else:
                    print ("entra en forecast")
                    engines_output['Holtwinters'] = forecast_holt(lista_datos,num_fut,desv_mse,name)
                    debug['Holtwinters'] = engines_output['Holtwinters']['debug']
+
+            temp_info['Holtwinters'] = engines_output['Holtwinters']
+            self.update_state(state='PROGRESS',
+                      meta={'running': 'Holtwinters',
+                            'status': temp_info,
+                            'total': 4,
+                            'finish': 4})
+
         except  Exception as e:
                print(e)
                print ('ERROR: exception executing Holtwinters')
-        temp_info['Holtwinters'] = engines_output['Holtwinters']
-        self.update_state(state='PROGRESS',
-                  meta={'running': 'Holtwinters',
-                        'status': temp_info,
-                        'total': 4,
-                        'finish': 4})
 
 
         best_mae=999999999
@@ -394,6 +398,18 @@ def multivariate_engine():
     salida = ft.model_multivariate(list_var,num_fut,desv_mae)
     #print(salida)
     return jsonify(salida), 201
+
+
+@app.route('/monitoring')
+def index():
+    data_models= db.get_all_models(' ')
+    return jsonify(data_models),201
+
+
+@app.route('/monitoring_winners')
+def index():
+    data_models= db.get_winners(' ')
+    return jsonify(data_models),201
 
 
 @app.route('/')
