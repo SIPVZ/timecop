@@ -171,11 +171,18 @@ def univariate_taskstatus(task_id):
     if task.state == 'SUCCESS':
         response = {
             'state': task.state,
-            'current': 0,
-            'total': 1,
+            'current': 4,
+            'total': 4,
             'result': task.info.get('result', ''),
-            'status': task.info.get('status', 'Running...')
+            'status': task.info.get('status', 'Sucessfully'),
+            'task_dump': str(task)
         }
+        if 'result' in task.info:
+            print ("el result aparece en el SUCCESS")
+            response['result'] = task.info['result']
+        else:
+            print ("el result NO aparece en el SUCCESS")
+
 
     elif task.state != 'FAILURE':
         response = {
