@@ -209,7 +209,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         best_model = min(dict_mse_models, key = dict_mse_models.get)
 
 
-        print('best_model',best_model)
+        #print('best_model',best_model)
 
         models_dict[best_model].save('./models_temp/lstm.model'+name)
         print ("insertando modelo LSTM")
@@ -224,9 +224,9 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
 
         print ("Adquiring best LSTM model")
         (model_name,mymodel,params)=get_best_model(name)
-        print("el modelo es")
-        print(model_name)
-        print (mymodel)
+        #print("el modelo es")
+        #print(model_name)
+        #print (mymodel)
         with open('./models_temp/lstm.model'+name, "wb") as newFile:
             newFile.write(mymodel)
             newFile.close()

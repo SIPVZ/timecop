@@ -138,10 +138,10 @@ def get_all_models(name):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
 
-    query = session.query(Model).filter(Model.TS_name.like(model_name)).all()
+    query = session.query(Model).filter(Model.TS_name.like(name)).all()
     df = pd.DataFrame(query_to_dict(query))
     df.drop('TS_model',axis=1,inplace=True)
-    return (df[['TS_name', 'TS_winner_name','TS_update','TS_metric']])
+    return (df[['TS_name', 'TS_winner_name','TS_update']])
 
 
 
@@ -159,8 +159,8 @@ def get_winners(name):
     #     print (mt.TS_winner_name)
     #     print (mt.TS_update)
     #filter(Note.message.like("%somestr%")
-    winner_model_type = session.query(Model).filter(Model.TS_name.like(model_name)).filter(Model.TS_name.like('winner%')).order_by(desc('TS_update')).all()
+    winner_model_type = session.query(Model).filter(Model.TS_name.like(name)).filter(Model.TS_name.like('winner%')).order_by(desc('TS_update')).all()
 
     df = pd.DataFrame(query_to_dict(winner_model_type))
     df.drop('TS_model',axis=1,inplace=True)
-    return (df[['TS_name', 'TS_winner_name','TS_update','TS_metric']])
+    return (df[['TS_name', 'TS_winner_name','TS_update']])

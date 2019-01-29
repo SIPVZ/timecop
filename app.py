@@ -338,7 +338,16 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     print (engines_output[winner])
     temp= {}
     temp['debug']=debug
-    return merge_two_dicts(engines_output[winner] , temp)
+#    return merge_two_dicts(engines_output[winner] , temp)
+    salida = merge_two_dicts(engines_output[winner], temp_info)
+    salida_temp= {}
+    salida_temp['result'] = salida
+    salida_temp['current'] = 100
+    salida_temp['total']=100
+    salida_temp['status'] ='Task completed'
+
+    return  salida_temp
+
 
 
 
