@@ -391,7 +391,9 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
 
     engine_output['debug'] = testing_data.fillna(0).to_dict(orient='record')
     K.clear_session()
-    del models_dict
+    for model in models_dict:
+        del model
+    print ("Models erased")
     gc.collect()
     return engine_output
 
