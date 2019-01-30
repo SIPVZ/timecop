@@ -16,4 +16,4 @@ service redis-server start
 sleep 10;
 
 
-cd /app; celery worker -A app.celery --concurrency=1 --max-memory-per-child=1500000 --loglevel=info &
+cd /app; celery worker -A app.celery --concurrency=1  --loglevel=info &
