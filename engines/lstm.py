@@ -6,6 +6,7 @@ from sklearn.metrics import mean_squared_error,mean_absolute_error
 from keras.models import Sequential
 from keras.layers.recurrent import LSTM
 from keras.layers.core import Dense
+from keras import backend as K
 import math
 #import helpers as h
 from keras.layers import Dropout
@@ -386,7 +387,8 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
     testing_data['step']=testing_data.index
 
     engine_output['debug'] = testing_data.fillna(0).to_dict(orient='record')
-
+    K.clear_session()
+    del models_dict
     return engine_output
 
 
