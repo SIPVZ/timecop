@@ -19,6 +19,9 @@ from sklearn.metrics import mean_squared_error,mean_absolute_error
 from keras.models import Sequential
 from keras.layers.recurrent import LSTM
 from keras.layers.core import Dense
+
+import gc
+
 import math
 from matplotlib import pyplot
 from numpy.random import seed
@@ -389,6 +392,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
     engine_output['debug'] = testing_data.fillna(0).to_dict(orient='record')
     K.clear_session()
     del models_dict
+    gc.collect()
     return engine_output
 
 
