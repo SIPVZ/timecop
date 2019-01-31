@@ -10,6 +10,10 @@
       <img v-if="!dark" src="static/img/logo.svg" height="70%" class="pa-1" alt="Time Cop">
       <img v-else src="static/img/logo_dark.svg" height="70%" class="pa-1" alt="Time Cop">
       <v-spacer></v-spacer>
+      <v-btn light target="new" href="https://github.com/BBVA/timecop">
+        <img class="mr-2" src="static/github.svg" height="26px" alt="github">
+        <span>github</span>
+      </v-btn>
       <v-btn flat color="blue" @click="toggleDataVisibility = !toggleDataVisibility">
         data
         <v-icon v-if="toggleDataVisibility" right>visibility</v-icon>

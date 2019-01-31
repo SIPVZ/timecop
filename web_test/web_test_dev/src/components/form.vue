@@ -30,9 +30,14 @@
               </v-list-tile-content>
               <v-list-tile-action>
                 <v-text-field
+                  v-if="item.type === 'n' || item.type === 's'"
                   :style="{width: item.type === 'n' ? '48px' : '260px'}"
                   single-line persistent-hint full-width outline
                   v-model="item.value" />
+                <v-switch
+                  v-else
+                  v-model="item.value"
+                ></v-switch>
               </v-list-tile-action>
             </v-list-tile>
           </v-list>
@@ -46,22 +51,18 @@
       </v-card>
     </v-dialog>
     <!-- loading dialog -->
-    <v-dialog
-      v-model="loading"
-      hide-overlay
-      persistent
-      width="300"
-    >
-      <v-card max-width="300">
-        <v-card-text>
-          Processing... this may take a while
-          <v-progress-linear
-            indeterminate
-            class="mb-0"
-          ></v-progress-linear>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
+    <v-card v-if="loading">
+      <v-card-text>
+        Processing... this may take a while
+        <v-progress-linear
+          indeterminate
+          class="mb-0"
+        ></v-progress-linear>
+      </v-card-text>
+      <v-card-text v-for="(item, i) in info" :key="i">
+        {{i}}: <strong>{{item}}</strong>
+      </v-card-text>
+    </v-card>
     <!-- error dialog -->
     <v-dialog
       v-model="errorDialog.value"
@@ -92,7 +93,7 @@ export default {
     csvLoader
   },
   data: () => ({
-    url: 'http://localhost:5000/univariate/get',
+    url: 'http://localhost:3000/back_univariate',
     dataToProcess: '',
     loading: false,
     future: 5,
@@ -143,6 +144,20 @@ export default {
         value: 2,
         type: 'n',
         key: 'desv_metric'
+      },
+      {
+        title: 'Train',
+        subtitle: '',
+        value: true,
+        type: 'boolean',
+        key: 'train'
+      },
+      {
+        title: 'Restart',
+        subtitle: '',
+        value: true,
+        type: 'boolean',
+        key: 'restart'
       }
     ],
     selectHeaderDialog: {
@@ -154,7 +169,13 @@ export default {
       timeseries: [],
       main: []
     },
-    mainKey: null
+    mainKey: null,
+    state: '',
+    info: {
+      finish: '',
+      running: '',
+      total: 'not yet'
+    }
   }),
   methods: {
     formatData () {
@@ -171,30 +192,48 @@ export default {
           })
         }
         this.parametersList.map(v => {
-          if (v.value) {
+          if (v.value !== '') {
             dToSent[v.key] = v.value
           }
         })
         this.dataToProcess = JSON.stringify(dToSent)
         this.resetParametersDialog()
-        this.getUrl()
+        this.getUrlToken()
       }
     },
     processCSV (e) {
       this.parametersDialog.active = true
       this.parametersDialog.data = e
     },
-    getUrl () {
-      // this.$emit('response', {dataToProcess: this.dataSet, result: resultTest})
+    getUrlToken () {
       this.loading = true
       this.$http.post(this.url, this.dataSet).then(response => {
-        this.$emit('response', {dataToProcess: this.dataSet, result: response.body})
-        this.loading = false
+        const newUrl = `${this.url}_status/${response.body.task_id}`
+        const interval = setInterval(() => {
+          if (this.state === 'SUCCESS') {
+            this.loading = false
+            clearInterval(interval)
+          }
+          this.getUrl(newUrl)
+        }, 2000)
+      })
+    },
+    getUrl (url) {
+      // this.$emit('response', {dataToProcess: this.dataSet, result: resultTest})
+      this.$http.get(url).then(response => {
+        console.log(response.body)
+        this.state = response.body.state
+        const r = response.body.response
+        this.info.finish = r.finish
+        this.info.running = r.running
+        this.info.total = r.total
+        this.$emit('response', {dataToProcess: this.dataSet, result: response.body.status})
       }).catch(err => {
         this.loading = false
         this.errorDialog.value = true
         this.errorDialog.text = err
         console.log(err)
+        this.state = 'SUCCESS'
       })
     },
     changeUrl (e) {

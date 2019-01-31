@@ -119,7 +119,6 @@
           @mousemove="extendedArea.el.h += $event.movementY" />
       </g>
     </svg>
-    <!-- TODO: parte ampliada -->
     <svg :viewBox="`${extendedArea.el.x} ${extendedArea.el.y} ${extendedArea.el.w} ${extendedArea.el.h}`"
     :class="background"
     width="100%"
@@ -206,7 +205,7 @@ export default {
           y: +v
         })),
         visible: true,
-        color: this.$utils.getRandomColor(),
+        color: this.resolveColor(this.toGraph.main),
         name: 'main'
       })
       // check for timeseries
@@ -216,17 +215,17 @@ export default {
           this.$set(this.toGraph, 'data-' + t, {
             data: timeseries[t].data.map((v, i) => ({ x: i, y: +v })),
             visible: true,
-            color: this.$utils.getRandomColor(),
+            color: this.resolveColor(this.toGraph['data-' + t]),
             name: 'data-' + t
           })
         }
       }
       // debug engines
-      if (d.prediction.debug) {
-        for (const key in d.prediction.debug) {
-          const engine = d.prediction.debug[key]
+      if (d.prediction) {
+        for (const key in d.prediction) {
+          const engine = d.prediction[key]
           this.$set(this.toGraph, key, {
-            data: engine.map(v => (
+            data: engine.debug.map(v => (
               {
                 x: +v.step,
                 y: +v['expected value'] ||
@@ -238,32 +237,38 @@ export default {
               })
             ),
             visible: true,
-            color: this.$utils.getRandomColor(),
+            color: this.resolveColor(this.toGraph[key]),
             name: key,
             debug: true
           })
         }
       }
       // prediction
-      let prediction = d.prediction.future
-      this.$set(this.toGraph, 'prediction', {
-        data: prediction.map((v, i) => ({
-          x: +v.step,
-          y: +v['expected value'] || +v['value'] || +v['valores'] || +v['var_0'] || +v['values']
-        })),
-        visible: true,
-        color: this.$utils.getRandomColor(),
-        name: 'prediction'
-      })
-      this.toGraph.prediction.data.unshift({
-        x: this.toGraph.main.data[this.toGraph.main.data.length - 1].x,
-        y: this.toGraph.main.data[this.toGraph.main.data.length - 1].y
-      })
+      let prediction = d.prediction
+      let someKey = null
+      for (const key in prediction) {
+        someKey = key
+        this.$set(this.toGraph, 'prediction-' + key, {
+          data: prediction[key].future.map((v, i) => ({
+            x: +v.step,
+            y: +v['expected value'] || +v['value'] || +v['valores'] || +v['var_0'] || +v['values']
+          })),
+          visible: true,
+          color: this.resolveColor(this.toGraph['prediction-' + key]),
+          name: 'prediction-' + key
+        })
+        this.toGraph['prediction-' + key].data.unshift({
+          x: this.toGraph.main.data[this.toGraph.main.data.length - 1].x,
+          y: this.toGraph.main.data[this.toGraph.main.data.length - 1].y
+        })
+      }
 
       // set default zoomMax width the length of main and prediction
-      this.zoomMax = toPredict.length + prediction.length
+      if (this.zoomMax === 100) {
+        this.zoomMax = toPredict.length + prediction.LSTM.future.length
+      }
       this.total = this.toGraph.main.data.concat(
-        this.toGraph.prediction.data
+        this.toGraph['prediction-' + someKey].data
       )
     },
     zoom (e) {
@@ -296,7 +301,13 @@ export default {
         this.extendedArea.el.y += e.movementY
       }
     },
-
+    resolveColor (expression) {
+      if (expression && expression.color) {
+        return expression.color
+      } else {
+        return this.$utils.getRandomColor()
+      }
+    },
     randomizeColors () {
       for (const graph in this.toGraph) {
         this.toGraph[graph].color = this.$utils.getRandomColor()
@@ -318,7 +329,7 @@ export default {
       handler: function (val) {
         if (val.toPredict && val.prediction) {
           this.$nextTick(() => {
-            this.reset()
+            // this.reset()
             this.drawData(val)
             this.$nextTick(() => {
               this.extendedArea.value = this.$refs['graph-container'].innerHTML
@@ -340,18 +351,19 @@ export default {
   },
   computed: {
     anomalies () {
-      const d = this.dataSet
-      if (d.toPredict) {
-        let anomalies = []
-        for (let i = 0; i < d.prediction.past.length; i++) {
-          const point = d.prediction.past[i].step
-          if (point) {
-            let xMark = this.$utils.scale(d.prediction.past[i].step, this.zoomMin, this.zoomMax, this.chartWidth)
-            anomalies.push(xMark)
-          }
-        }
-        return anomalies
-      }
+      // const d = this.dataSet
+      // if (d.toPredict) {
+      //   let anomalies = []
+      //   for (let i = 0; i < d.prediction.past.length; i++) {
+      //     const point = d.prediction.past[i].step
+      //     if (point) {
+      //       let xMark = this.$utils.scale(d.prediction.past[i].step, this.zoomMin, this.zoomMax, this.chartWidth)
+      //       anomalies.push(xMark)
+      //     }
+      //   }
+      //   return anomalies
+      // }
+      return []
     },
     globalMax () {
       let globalMax = -10e10
