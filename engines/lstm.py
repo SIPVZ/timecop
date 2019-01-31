@@ -184,10 +184,12 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
 #############################################################################################3
         best_mae = 999999999
         best_model=''
-        for hlayer in list_hlayers:
-            for nodes in list_n_nodes:
+        for hlayer in n_hlayers:
+            for nodes in n_nodes:
                 for drop in n_dropout:
-                    model = define_model(nodes, hlayer, drop, input_data, output_shape)
+                    K.clear_session()
+                    gc.collect()
+                    model = define_model(nodes, hlayer, drop, win_train_x, num_forecast)
                     name = 'model_nlayers_{}_nnodes_{}_dropout_{}'.format(hlayer, nodes, drop)
                     model.fit(win_train_x, win_train_y, epochs=25, verbose=0, shuffle=False)
 
@@ -274,7 +276,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         with open('./models_temp/lstm.model'+name,'rb') as f:
             mymodel = f.read()
 
-            new_model(name, 'LSTM', bytearray(mymodel),'',dict_mse_models[best_model])
+            new_model(name, 'LSTM', bytearray(mymodel),'',best_mae)
             f.close()
         actual_model= best_model
 
