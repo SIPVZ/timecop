@@ -69,11 +69,13 @@ def define_model(n_nodes, n_hlayers, dropout, input_data, output_shape):
     for i in range(n_hlayers-1):
         #print(i)
         if i == n_hlayers-2:
-            add_hlayer(model, n_nodes, return_sequences=False)
+            #add_hlayer(model, n_nodes, return_sequences=False)
+            model.add(LSTM(n_nodes, return_sequences=True))
             model.add(Dropout(dropout))
             model.add(BatchNormalization())
         else:
-            add_hlayer(model, n_nodes, return_sequences=True)
+            #add_hlayer(model, n_nodes, return_sequences=True)
+            model.add(LSTM(n_nodes, return_sequences=True))
             model.add(Dropout(dropout))
             model.add(BatchNormalization())
 
@@ -208,9 +210,9 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
             print ('rmse', rmse)
             print ('mae', mae)
             dict_mse_models[model] = mae
-            if mae != min(dict_mse_models, key = dict_mse_models.get):
-                del dict_mse_models[model]
-                del models_dict[model]
+            # if mae != min(dict_mse_models, key = dict_mse_models.get):
+            #     del dict_mse_models[model]
+            #     del models_dict[model]
 
         best_model = min(dict_mse_models, key = dict_mse_models.get)
 
