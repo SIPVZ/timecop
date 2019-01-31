@@ -61,8 +61,8 @@ def define_model(n_nodes, n_hlayers, dropout, input_data, output_shape):
         model.add(LSTM(output_dim =int(n_nodes), activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),
                    return_sequences=False))
     else:
-        model.add(LSTM(output_dim =int(n_nodes), activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),
-                   return_sequences=True))
+        #model.add(LSTM(output_dim =int(n_nodes), activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),return_sequences=True))
+        model.add(LSTM(activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),return_sequences=True,units =int(n_nodes) ))
     model.add(Dropout(dropout))
     #print(n_hlayers)
 
@@ -80,7 +80,8 @@ def define_model(n_nodes, n_hlayers, dropout, input_data, output_shape):
     model.add(Dense(int(n_nodes/2), activation='relu'))
     model.add(Dropout(dropout))
 
-    model.add(Dense(output_dim=int(output_shape)))
+    #model.add(Dense(output_dim=int(output_shape)))
+    model.add(Dense(units=int(output_shape)))
 
     model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
     return model
@@ -207,8 +208,9 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
             print ('rmse', rmse)
             print ('mae', mae)
             dict_mse_models[model] = mae
-            #if mae != min(dict_mse_models, key = dict_mse_models.get):
-                #del dict_mse_models[model]
+            if mae != min(dict_mse_models, key = dict_mse_models.get):
+                del dict_mse_models[model]
+                del models_dict[model]
 
         best_model = min(dict_mse_models, key = dict_mse_models.get)
 
