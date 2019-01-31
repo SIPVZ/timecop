@@ -190,11 +190,11 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
                     K.clear_session()
                     gc.collect()
                     model = define_model(nodes, hlayer, drop, win_train_x, num_forecast)
-                    name = 'model_nlayers_{}_nnodes_{}_dropout_{}'.format(hlayer, nodes, drop)
-                    model.fit(win_train_x, win_train_y, epochs=25, verbose=0, shuffle=False)
+                    model_name = 'model_nlayers_{}_nnodes_{}_dropout_{}'.format(hlayer, nodes, drop)
+                    model.fit(win_train_x, win_train_y, epochs=65, verbose=0, shuffle=False)
 
                     #models_dict[name] = model
-                    print(name)
+                    print(model_name)
                     yhat = model.predict(new_test_x)
                     yhat_test = yhat[:,0]
 
