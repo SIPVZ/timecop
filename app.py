@@ -345,7 +345,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     salida_temp= {}
     salida_temp['status'] = salida
     salida_temp['current'] = 100
-    salida_temp['total']=100
+    salida_temp['total']=4
+    salida_temp['finish'] =4
     salida_temp['result'] ='Task completed'
 
     return  salida_temp
