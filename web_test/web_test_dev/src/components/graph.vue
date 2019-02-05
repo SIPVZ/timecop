@@ -155,7 +155,8 @@ export default {
     toggleSize: {
       type: Boolean
     },
-    background: String
+    background: String,
+    triggerReset: Boolean
   },
   data: () => ({
     width: null,
@@ -222,54 +223,42 @@ export default {
       }
       // debug engines
       if (d.prediction) {
-        for (const key in d.prediction) {
-          const engine = d.prediction[key]
-          this.$set(this.toGraph, key, {
-            data: engine.debug.map(v => (
-              {
-                x: +v.step,
-                y: +v['expected value'] ||
-                  +v['valores'] ||
-                  +v['var_0'] ||
-                  +v['values'] ||
-                  +v['value'] ||
-                  +v['Prediction']
-              })
-            ),
-            visible: true,
-            color: this.resolveColor(this.toGraph[key]),
-            name: key,
-            debug: true
-          })
+        const res = d.prediction.status || d.prediction
+        for (const key in res) {
+          // no deberia hacer esto :/
+          if (key === 'Holtwinters' || key === 'LSTM' || key === 'VAR' || key === 'Autoarima') {
+            this.addDebugEngine(res[key], key)
+          }
         }
       }
+
       // prediction
-      let prediction = d.prediction
-      let someKey = null
-      for (const key in prediction) {
-        someKey = key
-        this.$set(this.toGraph, 'prediction-' + key, {
-          data: prediction[key].future.map((v, i) => ({
+      const prediction = d.prediction.future
+      if (prediction) {
+        this.$set(this.toGraph, 'prediction', {
+          data: prediction.map((v, i) => ({
             x: +v.step,
             y: +v['expected value'] || +v['value'] || +v['valores'] || +v['var_0'] || +v['values']
           })),
           visible: true,
-          color: this.resolveColor(this.toGraph['prediction-' + key]),
-          name: 'prediction-' + key
+          color: this.resolveColor(this.toGraph.prediction),
+          name: 'prediction'
         })
-        this.toGraph['prediction-' + key].data.unshift({
+        this.toGraph.prediction.data.unshift({
           x: this.toGraph.main.data[this.toGraph.main.data.length - 1].x,
           y: this.toGraph.main.data[this.toGraph.main.data.length - 1].y
         })
+        // set default zoomMax width the length of main and prediction
+        this.zoomMax += prediction.length
+        this.total = this.total.concat(
+          this.toGraph.prediction.data
+        )
       }
-
       // set default zoomMax width the length of main and prediction
       if (this.zoomMax === 100) {
-        this.zoomMax = toPredict.length + prediction.LSTM.future.length
+        this.zoomMax = toPredict.length
       }
-      this.total = this.toGraph.main.data.concat(
-        this.toGraph['prediction-' + someKey].data
-      )
+      this.total = this.toGraph.main.data
     },
     zoom (e) {
       if (!this.extendedArea.active) {
@@ -294,6 +283,25 @@ export default {
           }
         }
       }
+    },
+    addDebugEngine (engine, name) {
+      this.$set(this.toGraph, name, {
+        data: engine.debug.map(v => (
+          {
+            x: +v.step,
+            y: +v['expected value'] ||
+              +v['valores'] ||
+              +v['var_0'] ||
+              +v['values'] ||
+              +v['value'] ||
+              +v['Prediction']
+          })
+        ),
+        visible: true,
+        color: this.resolveColor(this.toGraph[name]),
+        name: name,
+        debug: true
+      })
     },
     moveExtendedArea (e) {
       if (this.extendedArea.el.draggable) {
@@ -325,11 +333,13 @@ export default {
     }
   },
   watch: {
+    triggerReset: function () {
+      this.reset()
+    },
     dataSet: {
       handler: function (val) {
         if (val.toPredict && val.prediction) {
           this.$nextTick(() => {
-            // this.reset()
             this.drawData(val)
             this.$nextTick(() => {
               this.extendedArea.value = this.$refs['graph-container'].innerHTML
@@ -351,18 +361,18 @@ export default {
   },
   computed: {
     anomalies () {
-      // const d = this.dataSet
-      // if (d.toPredict) {
-      //   let anomalies = []
-      //   for (let i = 0; i < d.prediction.past.length; i++) {
-      //     const point = d.prediction.past[i].step
-      //     if (point) {
-      //       let xMark = this.$utils.scale(d.prediction.past[i].step, this.zoomMin, this.zoomMax, this.chartWidth)
-      //       anomalies.push(xMark)
-      //     }
-      //   }
-      //   return anomalies
-      // }
+      const d = this.dataSet
+      if (d.toPredict && d.prediction.past) {
+        let anomalies = []
+        for (let i = 0; i < d.prediction.past.length; i++) {
+          const point = d.prediction.past[i].step
+          if (point) {
+            let xMark = this.$utils.scale(d.prediction.past[i].step, this.zoomMin, this.zoomMax, this.chartWidth)
+            anomalies.push(xMark)
+          }
+        }
+        return anomalies
+      }
       return []
     },
     globalMax () {

@@ -11,8 +11,9 @@
         </v-flex>
       </v-card-text>
       <v-card-actions>
-        <v-spacer></v-spacer>
         <csv-loader @loaded="processCSV" @serie="changeUrl"/>
+        <v-spacer></v-spacer>
+        <v-btn flat color="green" :disabled="!canSendData" @click="formatData">submit</v-btn>
       </v-card-actions>
     </v-card>
     <!-- parameters dialog -->
@@ -59,9 +60,6 @@
           class="mb-0"
         ></v-progress-linear>
       </v-card-text>
-      <v-card-text v-for="(item, i) in info" :key="i">
-        {{i}}: <strong>{{item}}</strong>
-      </v-card-text>
     </v-card>
     <!-- error dialog -->
     <v-dialog
@@ -84,8 +82,6 @@
 </template>
 
 <script>
-// import resultTest from '@/assets/dataTest/dataResponseUni'
-// import resultTest from '@/assets/dataTest/dataResponseMulti'
 import csvLoader from '@/components/csvLoader'
 export default {
   name: 'Tform',
@@ -170,35 +166,34 @@ export default {
       main: []
     },
     mainKey: null,
-    state: '',
-    info: {
-      finish: '',
-      running: '',
-      total: 'not yet'
-    }
+    state: ''
   }),
   methods: {
     formatData () {
-      const d = this.parametersDialog.data
-      let dToSent = {}
-      if (d.length > 0) {
-        if (d.length === 1) {
-          dToSent.data = d[0].data
-        } else {
-          dToSent.main = d[0].data
-          dToSent.timeseries = []
-          d.map((v, i) => {
-            if (i > 1) dToSent.timeseries.push(v)
-          })
-        }
-        this.parametersList.map(v => {
-          if (v.value !== '') {
-            dToSent[v.key] = v.value
-          }
-        })
-        this.dataToProcess = JSON.stringify(dToSent)
-        this.resetParametersDialog()
+      if (!this.parametersDialog.active) {
         this.getUrlToken()
+      } else {
+        const d = this.parametersDialog.data
+        let dToSent = {}
+        if (d.length > 0) {
+          if (d.length === 1) {
+            dToSent.data = d[0].data
+          } else {
+            dToSent.main = d[0].data
+            dToSent.timeseries = []
+            d.map((v, i) => {
+              if (i > 1) dToSent.timeseries.push(v)
+            })
+          }
+          this.parametersList.map(v => {
+            if (v.value !== '') {
+              dToSent[v.key] = v.value
+            }
+          })
+          this.dataToProcess = JSON.stringify(dToSent)
+          this.resetParametersDialog()
+          this.getUrlToken()
+        }
       }
     },
     processCSV (e) {
@@ -206,34 +201,33 @@ export default {
       this.parametersDialog.data = e
     },
     getUrlToken () {
+      this.$emit('reset')
       this.loading = true
       this.$http.post(this.url, this.dataSet).then(response => {
         const newUrl = `${this.url}_status/${response.body.task_id}`
         const interval = setInterval(() => {
-          if (this.state === 'SUCCESS') {
+          if (this.state === 'SUCCESS' || this.state === 'ERROR') {
             this.loading = false
+            this.state = ''
             clearInterval(interval)
+          } else {
+            this.getUrl(newUrl)
           }
-          this.getUrl(newUrl)
         }, 2000)
       })
     },
     getUrl (url) {
-      // this.$emit('response', {dataToProcess: this.dataSet, result: resultTest})
       this.$http.get(url).then(response => {
         console.log(response.body)
         this.state = response.body.state
-        const r = response.body.response
-        this.info.finish = r.finish
-        this.info.running = r.running
-        this.info.total = r.total
-        this.$emit('response', {dataToProcess: this.dataSet, result: response.body.status})
+        const r = response.body.response || response.body.status
+        this.$emit('response', {dataToProcess: this.dataSet, result: r})
       }).catch(err => {
         this.loading = false
         this.errorDialog.value = true
         this.errorDialog.text = err
         console.log(err)
-        this.state = 'SUCCESS'
+        this.state = 'ERROR'
       })
     },
     changeUrl (e) {
@@ -254,6 +248,14 @@ export default {
     },
     amountSelectedData () {
       return Object.keys(this.selectHeaderDialog.selectedHeaders).length
+    },
+    canSendData () {
+      try {
+        JSON.parse(this.dataToProcess)
+      } catch (e) {
+        return false
+      }
+      return true
     }
   }
 }

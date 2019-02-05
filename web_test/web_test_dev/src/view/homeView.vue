@@ -23,6 +23,7 @@
     <v-layout wrap>
       <v-flex :class="toggleDataVisibility ? 'xs8' : 'xs12'">
         <t-graph-2d
+        :triggerReset="reset"
         :dataSet="response"
         :toggleSize="toggleDataVisibility"
         :height="350"
@@ -30,7 +31,7 @@
         :background="dark ? 'grey darken-3': 'grey lighten-3'"/>
       </v-flex>
       <v-flex xs4 v-show="toggleDataVisibility">
-        <t-form @response="showResponse" class="mb-4"></t-form>
+        <t-form @response="showResponse" @reset="reset = !reset" class="mb-4"></t-form>
         <t-json :json="response.prediction"></t-json>
       </v-flex>
     </v-layout>
@@ -51,7 +52,8 @@ export default {
   data: () => ({
     response: {},
     toggleDataVisibility: true,
-    dark: true
+    dark: true,
+    reset: false
   }),
   mounted () {
     this.$emit('toggleTheme', this.dark)
