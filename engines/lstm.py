@@ -58,8 +58,7 @@ def add_hlayer(model, num_nodes, return_sequences=False):
 def define_model(n_nodes, n_hlayers, dropout, input_data, output_shape):
     model = Sequential()
     if n_hlayers == 1:
-        model.add(LSTM(output_dim =int(n_nodes), activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),
-                   return_sequences=False))
+        model.add(LSTM(output_dim =int(n_nodes), activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),return_sequences=False))
     else:
         #model.add(LSTM(output_dim =int(n_nodes), activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),return_sequences=True))
         model.add(LSTM(activation='relu', input_shape =(input_data.shape[1], input_data.shape[2]),return_sequences=True,units =int(n_nodes) ))
