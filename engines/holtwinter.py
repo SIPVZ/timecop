@@ -95,7 +95,7 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
                 fit_stepwise_model_camb = stepwise_model_camb.fit()
                 forecast_camb = fit_stepwise_model_camb.forecast(i)
 
-                list_forecast_camb.append(forecast_camb.values[:i])
+                list_forecast_camb.extend(forecast_camb.values[:i])
 
             mae_temp = mean_absolute_error(list_forecast_camb,df_test['valores'].values)
             if mae_temp < mae_period:
