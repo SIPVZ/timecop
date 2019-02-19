@@ -9,6 +9,17 @@ from . BBDD import new_model, get_best_model
 from struct import *
 
 
+def chunkIt(seq, num):
+    avg = len(seq) / float(num)
+    out = []
+    last = 0.0
+
+    while last < len(seq):
+        out.append(len(seq[int(last):int(last + avg)]))
+        last += avg
+
+    return out
+
 def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
 
     lista_puntos = np.arange(0, len(lista_datos),1)
@@ -70,19 +81,21 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
     #list_trend=['add','mul','additive','multiplicative']
     list_trend=['add']
     for trend in list_trend:
-        for period in range(2,18):
+        for period in range(4,18):
             print ('Periodo', period)
             list_forecast_camb = []
             tam_train = int(len(df)*0.7)
             df_test = df[tam_train:]
-            for i in range(0,len(df_test)):
+            part_lenghts = chunkIt(range(len(df_test)),4)
+
+            for i in part_lenghts:
                 print ('Prediccion punto ', i)
                 df_train_camb = df[:tam_train+i]
                 stepwise_model_camb =  ExponentialSmoothing(df_train_camb['valores'],seasonal_periods=period ,trend=trend, seasonal='add', )
                 fit_stepwise_model_camb = stepwise_model_camb.fit()
-                forecast_camb = fit_stepwise_model_camb.forecast(1)
+                forecast_camb = fit_stepwise_model_camb.forecast(i)
 
-                list_forecast_camb.append(forecast_camb.values[0])
+                list_forecast_camb.extend(forecast_camb.values[:i])
 
             mae_temp = mean_absolute_error(list_forecast_camb,df_test['valores'].values)
             if mae_temp < mae_period:
