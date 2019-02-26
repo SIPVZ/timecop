@@ -81,8 +81,8 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
     #list_trend=['add','mul','additive','multiplicative']
     list_trend=['add','mul', 'additive', 'multiplicative','None']
     periods = seasonal_options(df)
-    for trend_val in list_trend:
-        for seasonal_val in list_trend:
+    #for trend_val in list_trend:
+    for seasonal_val in list_trend:
             for period in periods:
                 print ('Periodo', period)
                 list_forecast_camb = []
@@ -101,10 +101,10 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
                 mae_temp = mean_absolute_error(list_forecast_camb,df_test['valores'].values)
                 if mae_temp < mae_period:
                             best_period = period
-                            best_trend = trend_val
+    #                        best_trend = trend_val
                             best_seasonal = seasonal_val
                             print ('best_period',best_period)
-                            print ('best_trend', best_trend)
+    #                        print ('best_trend', best_trend)
                             print ('mae_temp', mae_temp)
                             print ('best_seasonal', best_seasonal)
                             mae_period = mae_temp
