@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error,mean_absolute_error
 from statsmodels.tsa.api import ExponentialSmoothing
-from . helpers import create_train_test
+from . helpers import create_train_test,seasonal_options
 import pickle
 from . BBDD import new_model, get_best_model
 from struct import *
@@ -80,7 +80,7 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
     best_trend='null'
     #list_trend=['add','mul','additive','multiplicative']
     list_trend=['add','mul', 'additive', 'multiplicative']
-    periods = list(range(4,18))
+    periods = seasonal_options(df)
     for trend_val in list_trend:
         for seasonal_val in list_trend:
             for period in periods:
