@@ -80,38 +80,35 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
     best_trend='null'
     #list_trend=['add','mul','additive','multiplicative']
     list_trend=['add','mul', 'additive', 'multiplicative']
-    periods = range(4,18)
-    periods.append(None)
-    for trend in list_trend:
-        for period in periods:
-            print ('Periodo', period)
-            list_forecast_camb = []
-            tam_train = int(len(df)*0.7)
-            df_test = df[tam_train:]
-            part_lenghts = chunkIt(range(len(df_test)),2)
+    periods = list(range(4,18))
+    for trend_val in list_trend:
+        for seasonal_val in list_trend:
+            for period in periods:
+                print ('Periodo', period)
+                list_forecast_camb = []
+                tam_train = int(len(df)*0.7)
+                df_test = df[tam_train:]
+                part_lenghts = chunkIt(range(len(df_test)),3)
 
-            for i in part_lenghts:
-                for seasonal in part_lenghts:
-                    for trend in part_lenghts:
+                for i in part_lenghts:
                         print ('Prediccion punto ', i)
                         df_train_camb = df[:tam_train+i]
-                        stepwise_model_camb =  ExponentialSmoothing(df_train_camb['valores'],seasonal_periods=period ,trend=trend, seasonal=seasonal )
-                        fit_stepwise_model_camb = stepwise_model_camb.fit()
-                        forecast_camb = fit_stepwise_model_camb.forecast(i)
+                        stepwise_model_camb =  ExponentialSmoothing(df_train_camb['valores'] ,trend=trend_val, seasonal=seasonal_val ,seasonal_periods=period ).fit()
+                        forecast_camb = stepwise_model_camb.forecast(i)
 
                         list_forecast_camb.extend(forecast_camb.values[:i])
 
-                        mae_temp = mean_absolute_error(list_forecast_camb,df_test['valores'].values)
-                        if mae_temp < mae_period:
+                mae_temp = mean_absolute_error(list_forecast_camb,df_test['valores'].values)
+                if mae_temp < mae_period:
                             best_period = period
-                            best_trend = trend
-                            best_seasonal = seasonal
+                            best_trend = trend_val
+                            best_seasonal = seasonal_val
                             print ('best_period',best_period)
                             print ('best_trend', best_trend)
                             print ('mae_temp', mae_temp)
                             print ('best_seasonal', best_seasonal)
                             mae_period = mae_temp
-                        else:
+                else:
                             print ('aa')
 
 

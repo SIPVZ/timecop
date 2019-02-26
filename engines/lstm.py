@@ -159,7 +159,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         ##################neural network######################
 
         models_dict = {}
-        n_hlayers = [1, 2]
+        n_hlayers = [1, 2,3]
         n_nodes = [100, 300, 500]
         n_dropout = [0, 0.1, 0.15, 0.20]
 
@@ -190,7 +190,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
                     gc.collect()
                     model = define_model(nodes, hlayer, drop, win_train_x, num_forecast)
                     model_name = 'model_nlayers_{}_nnodes_{}_dropout_{}'.format(hlayer, nodes, drop)
-                    model.fit(win_train_x, win_train_y, epochs=65, verbose=0, shuffle=False)
+                    model.fit(win_train_x, win_train_y, epochs=85, verbose=0, shuffle=False)
 
                     #models_dict[name] = model
                     print(model_name)
@@ -399,7 +399,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
     #print('reshape win_todo_x',win_todo_x.shape)
 
 
-    name_model = actual_model.fit(win_todo_x, win_todo_y, epochs=25, verbose=0, shuffle=False)
+    name_model = actual_model.fit(win_todo_x, win_todo_y, epochs=85, verbose=0, shuffle=False)
 
 
 
@@ -563,7 +563,7 @@ def anomaly_LSTM(list_var,num_fut=10,desv_mae=2):
         #print 'fit model {}'.format(model)
         try:
             seed(69)
-            name_model = models_dict[model].fit(win_train_x, win_train_y_var_pred, epochs=25, verbose=0, shuffle=False)
+            name_model = models_dict[model].fit(win_train_x, win_train_y_var_pred, epochs=85, verbose=0, shuffle=False)
             dict_eval_models[model] = name_model
         except:
             dict_eval_models[model] = 'Error'
@@ -700,7 +700,7 @@ def anomaly_LSTM(list_var,num_fut=10,desv_mae=2):
     #print ('win_todo_y_var_pred',win_todo_y_var_pred)
     #print ('shape win_todo_y_var_pred',win_todo_y_var_pred.shape)
 
-    name_model = models_dict[best_model].fit(win_todo_x, win_todo_y_var_pred, epochs=25, verbose=0, shuffle=False)
+    name_model = models_dict[best_model].fit(win_todo_x, win_todo_y_var_pred, epochs=85, verbose=0, shuffle=False)
 
     falta_win_todo_x = x[-num_forecast:,:]
     #print ('falta_win_todo_x',falta_win_todo_x)
