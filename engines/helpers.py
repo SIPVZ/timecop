@@ -8,6 +8,8 @@ import statsmodels.api as sm
 
 
 def seasonal_options (a):
+  print(" Starting seasonal finding")
+  print(a)
   x =sm.tsa.stattools.pacf(a)
 
   possible =[]
@@ -19,6 +21,7 @@ def seasonal_options (a):
     last2 = x[i+2]
     if (before2 < before < period > last ):
       possible.append(i-1)
+  print ("Finishing seasonal finding")
   return possible
 
 def windows(seq, num):

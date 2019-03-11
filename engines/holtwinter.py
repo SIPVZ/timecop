@@ -79,8 +79,10 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
     best_period=0
     best_trend='null'
     #list_trend=['add','mul','additive','multiplicative']
-    list_trend=['add','mul', 'additive', 'multiplicative','None']
+    list_trend=['add','mul', 'additive', 'multiplicative'] #,'None']
+    print ("pasa hasta aqui")
     periods = seasonal_options(df)
+    print (periods)
     #for trend_val in list_trend:
     for seasonal_val in list_trend:
             for period in periods:
@@ -117,7 +119,7 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
 
 
 
-    stepwise_model =  ExponentialSmoothing(df_train['valores'],seasonal_periods=best_period ,trend=best_trend, seasonal='add', )
+    stepwise_model =  ExponentialSmoothing(df_train['valores'],seasonal_periods=best_period , seasonal=best_seasonal )
     fit_stepwise_model = stepwise_model.fit()
 
     future_forecast_pred = fit_stepwise_model.forecast(len(df_test['valores']))
@@ -169,7 +171,7 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
     df_aler_ult['anomaly_score']= ( df_aler_ult['anomaly_score'] - min ) /(max - min)
 
     print ("Anomaly finished. Start forecasting")
-    stepwise_model1 =  ExponentialSmoothing(df['valores'],seasonal_periods=best_period,trend=best_trend , seasonal='add')
+    stepwise_model1 =  ExponentialSmoothing(df['valores'],seasonal_periods=best_period,seasonal=best_seasonal)
     print ("Pass the training")
     fit_stepwise_model1 = stepwise_model1.fit()
 
