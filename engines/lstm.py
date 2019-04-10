@@ -214,7 +214,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
                     print ('mae', mae)
                     if mae < best_mae:
                             best_mae=mae
-                            print ("LSTM best new model " + str(mae))
+                            print ("LSTM best new model " + str(mae)+'\n')
                             best_model=model
 
 
