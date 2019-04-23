@@ -81,7 +81,7 @@ def anomaly_holt(lista_datos,num_fut,desv_mse=0,name='NA'):
     #list_trend=['add','mul','additive','multiplicative']
     list_trend=['add','mul', 'additive', 'multiplicative'] #,'None']
     print ("pasa hasta aqui")
-    periods = seasonal_options(df)
+    periods = seasonal_options(df.valores)
     print (periods)
     #for trend_val in list_trend:
     for seasonal_val in list_trend:
