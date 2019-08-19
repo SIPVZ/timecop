@@ -10,7 +10,7 @@ from celery import Celery
 
 
 # import engines functions_timeseries
-from engines.helpers import merge_two_dicts
+from engines.helpers import merge_two_dicts,trendline
 from engines.var import anomaly_VAR, univariate_anomaly_VAR,univariate_forecast_VAR
 from engines.holtwinter import anomaly_holt,forecast_holt
 from engines.auto_arima import anomaly_AutoArima
@@ -348,6 +348,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     print (engines_output[winner])
     temp= {}
     temp['debug']=debug
+    temp['trend']= trendline(lista_datos)
 
 #    return merge_two_dicts(engines_output[winner] , temp)
     salida = merge_two_dicts(engines_output[winner], temp_info)
