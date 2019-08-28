@@ -353,6 +353,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 #    return merge_two_dicts(engines_output[winner] , temp)
     salida = merge_two_dicts(engines_output[winner], temp_info)
     salida['winner'] = winner
+    salida['trend']= trendline(lista_datos)
     salida_temp= {}
     salida_temp['status'] = salida
     salida_temp['current'] = 100
