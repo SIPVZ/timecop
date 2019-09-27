@@ -160,8 +160,8 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
 
         models_dict = {}
         n_hlayers = [1, 2,3]
-        n_nodes = [100, 300, 500]
-        n_dropout = [0, 0.1, 0.15, 0.20]
+        n_nodes = [100, 300]
+        n_dropout = [ 0.1, 0.15, 0.20]
 
         #pruebas
         #n_hlayers = [1]
