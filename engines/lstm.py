@@ -269,13 +269,13 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         print("Finish")
         gc.collect()
         print("Storing model")
-        best_model.save('./models_temp/lstm.model'+name)
-        print ("insertando modelo LSTM")
-        with open('./models_temp/lstm.model'+name,'rb') as f:
-            mymodel = f.read()
+        #best_model.save('./models_temp/lstm.model'+name)
+        #print ("insertando modelo LSTM")
+        #with open('./models_temp/lstm.model'+name,'rb') as f:
+        #    mymodel = f.read()
 
-            new_model(name, 'LSTM', bytearray(mymodel),'',best_mae)
-            f.close()
+        #    new_model(name, 'LSTM', bytearray(mymodel),'',best_mae)
+        #    f.close()
         actual_model= best_model
         print("Final model adquired")
 
