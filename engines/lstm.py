@@ -267,7 +267,6 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         #         del models_dict[model]
         #         print ("Model "+ model +" erased")
         print("Finish")
-        gc.collect()
         print("Storing model")
         best_model.save('./models_temp/lstm.model.new'+name)
         #print ("insertando modelo LSTM")
@@ -278,7 +277,8 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         #    f.close()
         actual_model= best_model
         print("Final model adquired")
-
+        gc.collect()
+        
     else:
 
         print ("Adquiring best LSTM model")
