@@ -215,6 +215,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
                     if mae < best_mae:
                             best_mae=mae
                             print ("LSTM best new model " + str(mae)+"\n")
+                            model.save('./models_temp/lstm.model.temp.new'+name)
                             best_model=model
 
 
@@ -278,7 +279,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         actual_model= best_model
         print("Final model adquired")
         gc.collect()
-        
+
     else:
 
         print ("Adquiring best LSTM model")
