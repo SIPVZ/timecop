@@ -21,6 +21,7 @@ RUN pip3 install tbats
 RUN pip3 install celery
 RUN pip install redis
 RUN service redis-server start
+RUN pip install h5py
 
 
 COPY ./config/timeout.conf /etc/nginx/conf.d/
