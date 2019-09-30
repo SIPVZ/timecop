@@ -183,6 +183,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
 #############################################################################################3
         best_mae = 999999999
         best_model=''
+        best_model_name=''
         for hlayer in n_hlayers:
             for nodes in n_nodes:
                 for drop in n_dropout:
@@ -214,8 +215,9 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
                     print ('mae', mae)
                     if mae < best_mae:
                             best_mae=mae
+                            best_model_name=model_name
                             print ("LSTM best new model " + str(mae)+"\n")
-                            model.save('./models_temp/lstm.model.temp.new'+name)
+                            model.save('./models_temp/lstm.model.temp.'+name+model_name)
                             best_model=model
 
 
@@ -269,13 +271,13 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         #         print ("Model "+ model +" erased")
         print("Finish")
         print("Storing model")
-        best_model.save('./models_temp/lstm.model.new'+name)
-        #print ("insertando modelo LSTM")
-        #with open('./models_temp/lstm.model'+name,'rb') as f:
-        #    mymodel = f.read()
+        #best_model.save('./models_temp/lstm.model.new'+name)
+        print ("insertando modelo LSTM")
+        with open('./models_temp/lstm.model.temp.'+name+best_model_name,'rb') as f:
+            mymodel = f.read()
 
-        #    new_model(name, 'LSTM', bytearray(mymodel),'',best_mae)
-        #    f.close()
+            new_model(name, 'LSTM', bytearray(mymodel),'',best_mae)
+            f.close()
         actual_model= best_model
         print("Final model adquired")
         gc.collect()
