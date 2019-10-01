@@ -1,10 +1,9 @@
-from engines.helpers import merge_two_dicts
+from engines.helpers import merge_two_dicts,trendline
 from . var import anomaly_VAR, univariate_anomaly_VAR,univariate_forecast_VAR
 from . holtwinter import anomaly_holt,forecast_holt
 from . auto_arima import anomaly_AutoArima
 from . lstm import anomaly_LSTM, anomaly_uni_LSTM
 from . tbats import anomaly_uni_TBATS
-
 import traceback
 
 from . BBDD import new_model, get_best_model
@@ -53,12 +52,12 @@ def model_univariate(lista_datos,num_fut,desv_mse,train,name):
             print(e)
             print ('ERROR: exception executing LSTM univariate')
 
-    try:
-        engines_output['TBATS'] = anomaly_uni_TBATS(lista_datos,num_fut,desv_mse,train,name)
-        debug['TBATS'] = engines_output['TBATS']['debug']
-    except Exception as e:
-        print(e)
-        print ('ERROR: exception executing TBATS univariate')
+        try:
+            engines_output['TBATS'] = anomaly_uni_TBATS(lista_datos,num_fut,desv_mse,train,name)
+            debug['TBATS'] = engines_output['TBATS']['debug']
+        except Exception as e:
+            print(e)
+            print ('ERROR: exception executing TBATS univariate')
 
 
         try:
