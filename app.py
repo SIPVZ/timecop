@@ -424,6 +424,195 @@ def multivariate_engine():
     return jsonify(salida), 201
 
 
+
+@app.route('/back_multivariate', methods=['POST'])
+
+def  back_multivariate_engine():():
+    if not request.json:
+        abort(400)
+
+
+    timedata = request.get_json()
+    items = timedata['timeseries']
+    name = timedata.get('name', 'NA')
+    list_var=[]
+    for item in items:
+        data = item['data']
+        if(name != 'NA'):
+            sub_name = item['name']
+
+            filename= './lst/'+name + '_' + sub_name +'.lst'
+            try:
+                with open(filename, 'r') as filehandle:
+                    previousList = json.load(filehandle)
+            except Exception:
+                previousList=[]
+
+            lista = previousList + data
+            with open(filename, 'w') as filehandle:
+                json.dump(lista,filehandle)
+
+
+        list_var.append(data)
+
+
+
+    lista = timedata['main']
+    if(name != 'NA'):
+        filename= './lst/'+name+'.lst'
+        try:
+            with open(filename, 'r') as filehandle:
+                previousList = json.load(filehandle)
+        except Exception:
+            previousList=[]
+
+        lista = previousList + lista
+        with open(filename, 'w') as filehandle:
+            json.dump(lista,filehandle)
+
+    list_var.append(lista)
+
+    num_fut = int(timedata.get('num_future', 5))
+    desv_mae = int(timedata.get('desv_metric', 2))
+
+
+    desv_mse = 0
+
+    #salida = ft.model_multivariate(list_var,num_fut,desv_mae)
+    #print(salida)
+    return jsonify(salida), 201
+
+    print ("invoco el backend")
+    salida = back_model_multivariate.s(lista_datos=list_var,num_fut=num_fut,desv_mse=desv_mae,train=train,name=name).apply_async()
+
+    print (salida.id)
+
+        #task = long_task.apply_async()
+    valor = {'task_id': salida.id}
+    return jsonify(valor), 200
+    #return jsonify(salida), 201
+
+
+
+
+@app.route('/back_multivariate_status/<task_id>')
+def multivariate_taskstatus(task_id):
+    task = back_model_multivariate.AsyncResult(task_id)
+    print ("llega aqui")
+    print (task)
+
+    if task.state == 'PENDING':
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'status': 'Pending...'
+        }
+    if task.state == 'PROGRESS':
+        response = {
+            'state': task.state,
+            'current': 0,
+            'total': 1,
+            'status': task.info.get('status', 'Running...')
+        }
+    if task.state == 'SUCCESS':
+        response = {
+            'state': task.state,
+            'current': 4,
+            'total': 4,
+            'result': task.info.get('result', ''),
+            'status': task.info.get('status', 'Sucessfully'),
+            'task_dump': str(task)
+        }
+        # if 'result' in task.info:
+        #     print ("el result aparece en el SUCCESS")
+        #     response['result'] = task.info['result']
+        # else:
+        #     print ("el result NO aparece en el SUCCESS")
+
+
+    elif task.state != 'FAILURE':
+        response = {
+            'state': task.state,
+            'current': task.info.get('current', 0),
+            'total': task.info.get('total', 1),
+            'status': task.info.get('status', ''),
+            'result': task.info.get('result', ''),
+            'response': task.info
+        }
+    else:
+
+        # something went wrong in the background job
+        response = {
+            'state': task.state,
+            'current': 1,
+            'total': 1,
+            'status': str(task.info),  # this is the exception raised
+            'result': task.info
+        }
+    print (task.state)
+    print(task.info)
+    return jsonify(response)
+
+
+
+
+@celery.task(bind=True)
+def back_model_multivariate(self, lista_datos,num_fut,desv_mse,train=True,name='Test'):
+
+    engines_output={}
+    debug = {}
+
+    try:
+        engines_output['LSTM'] = anomaly_LSTM(list_var,num_fut,desv_mse)
+        debug['LSTM'] = engines_output['LSTM']['debug']
+        print (engines_output['LSTM'])
+    except   Exception as e:
+        print(e)
+        print ('ERROR: exception executing LSTM')
+
+    try:
+        engines_output['VAR'] = anomaly_VAR(list_var,num_fut)
+        debug['VAR'] = engines_output['VAR']['debug']
+        print (engines_output['VAR'])
+    except   Exception as e:
+        print(Exception)
+        print("type error: " + str(e))
+        print(traceback.format_exc())
+        print ('ERROR: exception executing VAR')
+
+    best_mae=999999999
+    winner='LSTM'
+    print ('The size is ')
+    print (len(engines_output))
+    print (debug)
+    for key, value in engines_output.items():
+        print (key)
+        print(str(value['mae']))
+        if value['mae'] < best_mae:
+            print (key + " " + str(value['mae']) + " best:" + str(best_mae) )
+            best_mae=value['mae']
+            winner=key
+
+    print ("el ganador es " + winner)
+    temp= {}
+    temp['debug']=debug
+    #return merge_two_dicts(engines_output[winner] , temp)
+    salida = merge_two_dicts(engines_output[winner], temp_info)
+    salida['winner'] = winner
+    salida['trend']= trendline(lista_datos)
+    salida_temp= {}
+    salida_temp['status'] = salida
+    salida_temp['current'] = 100
+    salida_temp['total']=4
+    salida_temp['finish'] =4
+    salida_temp['result'] ='Task completed'
+
+    return  salida_temp
+
+
+
+
 @app.route('/monitoring')
 def monitoring():
     model_name = request.args.get('model_name', default = '%', type = str)
