@@ -427,7 +427,7 @@ def multivariate_engine():
 
 @app.route('/back_multivariate', methods=['POST'])
 
-def  back_multivariate_engine():():
+def  back_multivariate_engine():
     if not request.json:
         abort(400)
 
