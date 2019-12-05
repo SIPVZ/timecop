@@ -480,7 +480,7 @@ def  back_multivariate_engine():
 
     #salida = ft.model_multivariate(list_var,num_fut,desv_mae)
     #print(salida)
-    return jsonify(salida), 201
+    #return jsonify(salida), 201
 
     print ("invoco el backend")
     salida = back_model_multivariate.s(lista_datos=list_var,num_fut=num_fut,desv_mse=desv_mae,train=train,name=name).apply_async()
