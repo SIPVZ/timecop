@@ -376,6 +376,9 @@ def multivariate_engine():
     timedata = request.get_json()
     items = timedata['timeseries']
     name = timedata.get('name', 'NA')
+    train = timedata.get('train', True)
+    restart = timedata.get('restart', False)
+
     list_var=[]
     for item in items:
         data = item['data']
@@ -435,6 +438,8 @@ def  back_multivariate_engine():
     timedata = request.get_json()
     items = timedata['timeseries']
     name = timedata.get('name', 'NA')
+    train = timedata.get('train', True)
+
     list_var=[]
     for item in items:
         data = item['data']
