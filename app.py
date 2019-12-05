@@ -563,7 +563,7 @@ def multivariate_taskstatus(task_id):
 
 
 @celery.task(bind=True)
-def back_model_multivariate(self, lista_datos,num_fut,desv_mse,train=True,name='Test'):
+def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Test'):
 
     engines_output={}
     debug = {}
