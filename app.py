@@ -153,6 +153,7 @@ def univariate_taskstatus(task_id):
     task = back_model_univariate.AsyncResult(task_id)
     print ("llega aqui")
     print (task)
+    print("----"+task.state+"----")
 
     if task.state == 'PENDING':
         response = {
@@ -164,9 +165,11 @@ def univariate_taskstatus(task_id):
     if task.state == 'PROGRESS':
         response = {
             'state': task.state,
-            'current': 0,
-            'total': 1,
-            'status': task.info.get('status', 'Running...')
+            'current': task.info.get('current', 0),
+            'total': task.info.get('total', 1),
+            'status': task.info.get('status', ''),
+            'result': task.info.get('result', ''),
+            'response': task.info
         }
     if task.state == 'SUCCESS':
         response = {
@@ -184,7 +187,7 @@ def univariate_taskstatus(task_id):
         #     print ("el result NO aparece en el SUCCESS")
 
 
-    elif task.state != 'FAILURE':
+    elif task.state == 'FAILURE':
         response = {
             'state': task.state,
             'current': task.info.get('current', 0),
@@ -192,16 +195,6 @@ def univariate_taskstatus(task_id):
             'status': task.info.get('status', ''),
             'result': task.info.get('result', ''),
             'response': task.info
-        }
-    else:
-
-        # something went wrong in the background job
-        response = {
-            'state': task.state,
-            'current': 1,
-            'total': 1,
-            'status': str(task.info),  # this is the exception raised
-            'result': task.info
         }
     print (task.state)
     print(task.info)
