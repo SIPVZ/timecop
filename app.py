@@ -157,10 +157,11 @@ def univariate_taskstatus(task_id):
 
     if task.state == 'PENDING':
         response = {
-            'state': task.state,
+            'state': 'Pending',
             'current': 0,
             'total': 1,
-            'status': 'Pending...'
+            'status': 'Pending...',
+            'result': 'Pending'
         }
     if task.state == 'PROGRESS':
         response = {
