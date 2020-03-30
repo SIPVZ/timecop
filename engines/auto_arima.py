@@ -4,8 +4,8 @@ import pmdarima as pm
 from sklearn.metrics import mean_squared_error,mean_absolute_error
 from . helpers import create_train_test
 
-def anomaly_AutoArima(lista_datos,num_fut,orig_size,desv_mse=0,train='True'):
-    
+def anomaly_AutoArima(lista_datos,num_fut,orig_size,desv_mse=0,train='True',name='model_name'):
+
     print (orig_size)
 
     print ("tamanio original")
