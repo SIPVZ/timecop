@@ -4,7 +4,7 @@ import pmdarima as pm
 from sklearn.metrics import mean_squared_error,mean_absolute_error
 from . helpers import create_train_test
 
-def anomaly_AutoArima(lista_datos,num_fut,orig_size,desv_mse=0,train='True',name='model_name'):
+def anomaly_AutoArima(lista_datos,num_fut,orig_size,desv_mse=0,train='True',name='model-name'):
 
     print (orig_size)
 
@@ -14,7 +14,11 @@ def anomaly_AutoArima(lista_datos,num_fut,orig_size,desv_mse=0,train='True',name
     print ("start point " + str(start_point))
     lista_puntos = np.arange(start_point, orig_size,1)
 
+    print(len(lista_puntos))
+    print(len(lista_datos))
+
     print (lista_puntos)
+    print("second phase")
     df, df_train, df_test = create_train_test(lista_puntos, lista_datos)
 
     engine_output={}
