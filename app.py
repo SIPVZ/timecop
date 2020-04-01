@@ -260,6 +260,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             if (len(lista_datos) > 100):
                 #new_length=
                 lista_datos_ari=lista_datos[len(lista_datos)-100:]
+            else:
+                lista_datos_ari=lista_datos
             engines_output['arima'] = anomaly_AutoArima(lista_datos_ari,num_fut,len(lista_datos),desv_mse,name)
             debug['arima'] = engines_output['arima']['debug']
             temp_info['arima']=engines_output['arima']
