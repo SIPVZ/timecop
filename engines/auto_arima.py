@@ -10,7 +10,10 @@ def anomaly_AutoArima(lista_datos,num_fut,orig_size,desv_mse=0,train='True',name
     print (orig_size)
 
     print ("tamanio original")
-    start_point= int(orig_size) - 100
+    if orig_size < 100:
+        start_point =0
+    else:
+        start_point= int(orig_size) - 100
 
     print ("start point " + str(start_point))
     lista_puntos = np.arange(start_point, orig_size,1)
