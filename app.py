@@ -630,6 +630,7 @@ def monitoring_winners():
 
 @app.route('/result_list', methods=['POST'])
 def result_list():
+    from bson import json_util
     timedata = request.get_json()
     collection = timedata.get(collection, 'NA')
     database = timedata.get('database', 'NA')
@@ -647,12 +648,12 @@ def result_list():
     collection_data= db[collection]
     import time
     import json
-    import requests
 
 
     result = list(collection_data.find({}))
 
-    return jsonify(result.to_dict(orient='record')),201
+    data = [json.dumps(item, default=json_util.default) for item in result]
+    return jsonify(data=data),201
 
 @app.route('/result_document', methods=['POST'])
 def result_document():
