@@ -9,3 +9,4 @@ pmdarima
 pyramid==1.10.1
 scikit_learn==0.20.0
 pickle-mixin
+pymongo

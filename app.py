@@ -628,6 +628,40 @@ def monitoring_winners():
     return jsonify(data_models.to_dict(orient='record')),201
 
 
+@app.route('/result_list', methods=['POST'])
+def result_list():
+    timedata = request.get_json()
+    collection = timedata.get(collection, 'NA')
+    database = timedata.get('database', 'NA')
+    url = timedata.get('url', 'NA')
+    ###"mongodb://username:pwd@ds261570.mlab.com:61570/ts?retryWrites=false"
+
+    import pandas as pd
+    import pymongo
+    from pymongo import MongoClient
+    # Making a Connection with MongoClient
+    client = MongoClient(url)
+    # database
+    db = client[database]
+    # collection
+    collection_data= db[collection]
+    import time
+    import json
+    import requests
+
+
+    result = list(collection_data.find({}))
+
+    return jsonify(result.to_dict(orient='record')),201
+
+@app.route('/result_document', methods=['POST'])
+def result_document():
+    model_name = request.args.get('model_name', default = '%', type = str)
+    data_models= db.get_winners(model_name)
+    return jsonify(data_models.to_dict(orient='record')),201
+
+
+
 @app.route('/')
 def index():
     return "Timecop ready to play"
