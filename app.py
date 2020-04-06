@@ -632,7 +632,7 @@ def monitoring_winners():
 def result_list():
     from bson import json_util
     timedata = request.get_json()
-    collection_ts = timedata.get(collection, 'NA')
+    collection_ts = timedata.get('collection', 'NA')
     database = timedata.get('database', 'NA')
     url = timedata.get('url', 'NA')
     ###"mongodb://username:pwd@ds261570.mlab.com:61570/ts?retryWrites=false"
