@@ -632,7 +632,7 @@ def monitoring_winners():
 def result_list():
     from bson import json_util
     timedata = request.get_json()
-    collection = timedata.get(collection, 'NA')
+    collection_ts = timedata.get(collection, 'NA')
     database = timedata.get('database', 'NA')
     url = timedata.get('url', 'NA')
     ###"mongodb://username:pwd@ds261570.mlab.com:61570/ts?retryWrites=false"
@@ -645,7 +645,7 @@ def result_list():
     # database
     db = client[database]
     # collection
-    collection_data= db[collection]
+    collection_data= db[collection_ts]
     import time
     import json
     from bson import json_util, ObjectId
@@ -662,9 +662,10 @@ def result_document():
         database = timedata.get('database', 'NA')
         url = timedata.get('url', 'NA')
         input_name = timedata.get('name','NA')
+        collection_ts = timedata.get('collection_ts','ts')
+        collection_timecop = timedata.get('collection_timecop','timecop')
         ###"mongodb://username:pwd@ds261570.mlab.com:61570/ts?retryWrites=false"
 
-        import pandas as pd
         import pymongo
         from pymongo import MongoClient
         # Making a Connection with MongoClient
@@ -672,13 +673,17 @@ def result_document():
         # database
         db = client[database]
         # collection
-        collection_data= db[collection]
+        collection_ts= db[collection_ts]
+        ts_data = collection_ts.find_one({"name": input_name})
+        collection_timecop= db[collection_timecop]
+        timecop_data = collection_timecop.find_one({"name": input_name})
+        timecop_data['ts']=ts_data['data']
         import time
         import json
         from bson import json_util, ObjectId
 
         #Dump loaded BSON to valid JSON string and reload it as dict
-        page_sanitized = json.loads(json_util.dumps(collection_data.find_one({"name": input_name})))
+        page_sanitized = json.loads(json_util.dumps(timecop_data))
         return jsonify(page_sanitized), 201
 
 
