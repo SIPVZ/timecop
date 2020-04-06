@@ -658,7 +658,6 @@ def result_list():
 def result_document():
         from bson import json_util
         timedata = request.get_json()
-        collection = timedata.get(collection, 'NA')
         database = timedata.get('database', 'NA')
         url = timedata.get('url', 'NA')
         input_name = timedata.get('name','NA')
@@ -673,10 +672,10 @@ def result_document():
         # database
         db = client[database]
         # collection
-        collection_ts= db[collection_ts]
-        ts_data = collection_ts.find_one({"name": input_name})
-        collection_timecop= db[collection_timecop]
-        timecop_data = collection_timecop.find_one({"name": input_name})
+        data_collection_ts= db[collection_ts]
+        ts_data = data_collection_ts.find_one({"name": input_name})
+        data_collection_timecop= db[collection_timecop]
+        timecop_data = data_collection_timecop.find_one({"name": input_name})
         timecop_data['ts']=ts_data['data']
         import time
         import json
