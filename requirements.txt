@@ -11,3 +11,4 @@ scikit_learn==0.20.0
 pickle-mixin
 bson
 pymongo
+fbprophet
