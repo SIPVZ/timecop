@@ -63,7 +63,7 @@ def model_univariate(self,lista_datos,num_fut,desv_mse,train,name):
             debug['fbprophet'] = engines_output['fbprophet']['debug']
         except Exception as e:
 
-            print ('ERROR: fbprophet univariate: ' + str(e))
+            print ('ERROR: fbprophet univariate: ' + str(e) )
 
         try:
             if (len(lista_datos) > 100):
