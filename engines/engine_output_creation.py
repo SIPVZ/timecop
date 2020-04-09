@@ -66,6 +66,7 @@ class engine_output_creation:
 
   def forecast_creation(self,forecasted_list , start_step,num_fut):
     df_future= pd.DataFrame(forecasted_list,columns=['value'])
+    df_future.rename(columns={df_future.columns[0]: "value"},inplace=True)
 
     df_future['value']=df_future.value.astype("float32")
 

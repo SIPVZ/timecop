@@ -42,7 +42,7 @@ def anomaly_fbprophet(lista_datos,num_fut,desv_mse=0,train=True,name='model-name
     future.tail()
     forecast = m_future.predict(future)
 
-    engine.forecast_creation( forecast[-len(df['valores']):]['yhat'], len(lista_datos),num_fut)
+    engine.forecast_creation( forecast[-num_fut:], len(lista_datos),num_fut)
     engine.metrics_generation( df_test['valores'].values, forecast[-len(df_test['valores']):]['yhat'])
     engine.debug_creation(forecast[-len(df['valores']):]['yhat'],df_test)
 
