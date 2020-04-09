@@ -28,11 +28,15 @@ class engine_output_creation:
     df_aler['expected value'] = forecasted_list
 
     df_aler['real_value'] = df_test['valores']
-    df_aler['mse'] = mse
-    df_aler['rmse'] = rmse
     list_test = df_test['valores'].values
 
-    df_aler['mae'] = mean_absolute_error(list_test, forecast[-len(df_test['valores']):]['yhat'])
+    mse = mean_squared_error(list_test, forecasted_list)
+    rmse = np.sqrt(mse)
+
+    df_aler['mse'] = mse
+    df_aler['rmse'] = rmse
+
+    df_aler['mae'] = mean_absolute_error(list_test, forecasted_list)
     df_aler['anomaly_score'] = abs(df_aler['expected value'] - df_aler['real_value']) / df_aler['mae']
 
     df_aler_ult = df_aler[:5]
@@ -65,7 +69,7 @@ class engine_output_creation:
 
     df_future['value']=df_future.value.astype("float32")
 
-    df_future['step']= np.arange( start_step,len(lista_datos)+num_fut,1)
+    df_future['step']= np.arange( start_step,start_step+num_fut,1)
     self.engine_output['future'] = df_future.to_dict(orient='record')
     return('OK')
 
