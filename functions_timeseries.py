@@ -3,6 +3,7 @@ from engines.var import anomaly_VAR, univariate_anomaly_VAR,univariate_forecast_
 from engines.holtwinter import anomaly_holt,forecast_holt
 from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
+from engines.fbprophet import anomaly_fbprophet
 import traceback
 
 #from .server import app,celery
@@ -53,6 +54,13 @@ def model_univariate(self,lista_datos,num_fut,desv_mse,train,name):
         try:
             engines_output['LSTM'] = anomaly_uni_LSTM(lista_datos,num_fut,desv_mse,train,name)
             debug['LSTM'] = engines_output['LSTM']['debug']
+        except Exception as e:
+            print(e)
+            print ('ERROR: exception executing LSTM univariate')
+
+        try:
+            engines_output['fbprophet'] = anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)
+            debug['fbprophet'] = engines_output['fbprophet']['debug']
         except Exception as e:
             print(e)
             print ('ERROR: exception executing LSTM univariate')
