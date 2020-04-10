@@ -244,18 +244,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
     else:
 
-        try:
-            engines_output['LSTM'] = anomaly_uni_LSTM(lista_datos,num_fut,desv_mse,train,name)
-            debug['LSTM'] = engines_output['LSTM']['debug']
-            temp_info['LSTM']=engines_output['LSTM']
-            self.update_state(state='PROGRESS',
-                      meta={'running': 'anomaly_AutoArima',
-                            'status': temp_info,
-                            'total': 4,
-                            'finish': 1})
-        except Exception as e:
-            print(e)
-            print ('ERROR: exception executing LSTM univariate')
+
 
         try:
             engines_output['fbprophet'] = anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)
@@ -336,6 +325,19 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         except  Exception as e:
                print(e)
                print ('ERROR: exception executing Holtwinters')
+
+        try:
+            engines_output['LSTM'] = anomaly_uni_LSTM(lista_datos,num_fut,desv_mse,train,name)
+            debug['LSTM'] = engines_output['LSTM']['debug']
+            temp_info['LSTM']=engines_output['LSTM']
+            self.update_state(state='PROGRESS',
+                      meta={'running': 'anomaly_AutoArima',
+                            'status': temp_info,
+                            'total': 4,
+                            'finish': 1})
+        except Exception as e:
+            print(e)
+            print ('ERROR: exception executing LSTM univariate')
 
 
         best_mae=999999999
