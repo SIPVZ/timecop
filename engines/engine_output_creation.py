@@ -32,6 +32,7 @@ class engine_output_creation:
 
     mse = mean_squared_error(list_test, forecasted_list)
     rmse = np.sqrt(mse)
+    df_aler['step'] = df_test['puntos']
 
     df_aler['mse'] = mse
     df_aler['rmse'] = rmse
