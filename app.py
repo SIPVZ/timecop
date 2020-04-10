@@ -272,7 +272,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'VAR',
                             'status': temp_info,
-                            'total': 4,
+                            'total': 5,
                             'finish': 2})
         except  Exception as e:
             print(e)
@@ -289,7 +289,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'Holtwinters',
                             'status': temp_info,
-                            'total': 4,
+                            'total': 5,
                             'finish': 3})
 
         except  Exception as e:
@@ -319,7 +319,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'Holtwinters',
                             'status': temp_info,
-                            'total': 4,
+                            'total': 5,
                             'finish': 4})
 
         except  Exception as e:
@@ -333,8 +333,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'anomaly_AutoArima',
                             'status': temp_info,
-                            'total': 4,
-                            'finish': 1})
+                            'total': 5,
+                            'finish': 5})
         except Exception as e:
             print(e)
             print ('ERROR: exception executing LSTM univariate')
