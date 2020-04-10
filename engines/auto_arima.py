@@ -106,7 +106,7 @@ def anomaly_AutoArima(lista_datos,num_fut,orig_size,desv_mse=0,train='True',name
     engine_output['engine']='Autoarima'
     df_future= pd.DataFrame(forecast,columns=['value'])
     df_future['value']=df_future.value.astype("float32")
-    df_future['step']= np.arange( len(lista_datos),len(lista_datos)+num_fut,1)
+    df_future['step']= np.arange( orig_size,orig_size+num_fut,1)
     engine_output['future'] = df_future.to_dict(orient='record')
     testing_data  = pd.DataFrame(future_forecast_pred,index = df_test.index,columns=['expected value'])
     testing_data['step']=testing_data.index
