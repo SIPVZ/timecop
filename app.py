@@ -17,6 +17,9 @@ from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 from engines.fbprophet import anomaly_fbprophet
 
+from datetime import datetime
+
+
 
 from struct import *
 
@@ -216,6 +219,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
     temp_info = {}
 
+    starttime = datetime.now()
+
     self.update_state(state='PROGRESS',
                       meta={'running': 'LSTM',
                             'status': '',
@@ -370,10 +375,13 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     salida_temp= {}
     salida_temp['status'] = salida
     salida_temp['current'] = 100
-    salida_temp['total']=4
-    salida_temp['finish'] =4
+    salida_temp['total']=5
+    salida_temp['finish'] =5
     salida_temp['result'] ='Task completed'
 
+    finishtime = datetime.now()
+    diff_time = starttime - finishtime
+    salida_temp['time']= diff_time.total_seconds()
     return  salida_temp
 
 
