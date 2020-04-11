@@ -432,9 +432,9 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
 
     engine_output={}
 
-    engine_output['rmse'] = int(rmse)
-    engine_output['mse'] = int(mse)
-    engine_output['mae'] = int(mae)
+    engine_output['rmse'] = float(rmse)
+    engine_output['mse'] = float(mse)
+    engine_output['mae'] = float(mae)
     engine_output['present_status']=exists_anom_last_5
     engine_output['present_alerts']=df_aler_ult.fillna(0).to_dict(orient='record')
     engine_output['past']=df_aler.fillna(0).to_dict(orient='record')
