@@ -1,7 +1,7 @@
 Flask_Cors==3.0.6
+numpy
 Keras
 sqlalchemy
-numpy
 pandas
 Flask==1.0.2
 statsmodels

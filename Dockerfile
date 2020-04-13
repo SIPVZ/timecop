@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y redis-server python3-celery python-cele
 
 COPY ./ /app
 COPY ./requirements.txt /tmp/
-RUN pip3 install --requirement /tmp/requirements.txt
+RUN pip3 install numpy pandas && pip3 install --requirement /tmp/requirements.txt
 
 COPY ./config/timeout.conf /etc/nginx/conf.d/
 RUN chmod -R g=u /etc/passwd /app && rm -fr /root/.cache/pip && service redis-server start
