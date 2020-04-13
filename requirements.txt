@@ -1,12 +1,10 @@
 Flask_Cors==3.0.6
-matplotlib==2.2.2
 Keras==2.2.5
 pyflux==0.4.15
 pandas==0.23.3
 Flask==1.0.2
 statsmodels==0.8.0
 pmdarima
-pyramid==1.10.1
 scikit_learn==0.20.0
 pickle-mixin
 bson

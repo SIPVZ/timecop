@@ -23,12 +23,10 @@ from keras.layers.core import Dense
 import gc
 
 import math
-from matplotlib import pyplot
 from numpy.random import seed
 seed(69)
 from math import sqrt
 from numpy import concatenate
-import matplotlib.pyplot as plt
 from pandas import read_csv
 from pandas import DataFrame
 from pandas import concat
