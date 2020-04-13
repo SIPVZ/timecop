@@ -2,8 +2,7 @@ Flask_Cors==3.0.6
 Keras
 sqlalchemy
 numpy
-pyflux==0.4.15
-pandas==0.23.3
+pandas
 Flask==1.0.2
 statsmodels
 pmdarima
