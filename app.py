@@ -253,17 +253,17 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
 
         try:
-            engines_output['gluonts'] = anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)
+            engines_output['gluonts'] = anomaly_gluonts(lista_datos,num_fut,desv_mse,train,name)
             debug['gluonts'] = engines_output['gluonts']['debug']
             temp_info['gluonts']=engines_output['gluonts']
             self.update_state(state='PROGRESS',
-                      meta={'running': 'gluon-ts',
+                      meta={'running': 'gluonts',
                             'status': temp_info,
                             'total': 6,
                             'finish': 1})
         except Exception as e:
 
-            print ('ERROR: gluon-ts univariate: ' + str(e) )
+            print ('ERROR: gluonts univariate: ' + str(e) )
 
 
         try:
