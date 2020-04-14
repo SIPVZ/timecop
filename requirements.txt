@@ -22,3 +22,4 @@ redis
 h5py
 lunarcalendar
 holidays
+pystan
