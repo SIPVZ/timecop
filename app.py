@@ -16,6 +16,7 @@ from engines.holtwinter import anomaly_holt,forecast_holt
 from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 from engines.fbprophet import anomaly_fbprophet
+from engines.gluonts import anomaly_gluonts
 
 from datetime import datetime
 
@@ -252,14 +253,28 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
 
         try:
+            engines_output['gluonts'] = anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)
+            debug['gluonts'] = engines_output['gluonts']['debug']
+            temp_info['gluonts']=engines_output['gluonts']
+            self.update_state(state='PROGRESS',
+                      meta={'running': 'gluon-ts',
+                            'status': temp_info,
+                            'total': 6,
+                            'finish': 1})
+        except Exception as e:
+
+            print ('ERROR: gluon-ts univariate: ' + str(e) )
+
+
+        try:
             engines_output['fbprophet'] = anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)
             debug['fbprophet'] = engines_output['fbprophet']['debug']
             temp_info['fbprophet']=engines_output['fbprophet']
             self.update_state(state='PROGRESS',
                       meta={'running': 'fbprophet',
                             'status': temp_info,
-                            'total': 5,
-                            'finish': 1})
+                            'total': 6,
+                            'finish': 2})
         except Exception as e:
 
             print ('ERROR: fbprophet univariate: ' + str(e) )
@@ -277,8 +292,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'VAR',
                             'status': temp_info,
-                            'total': 5,
-                            'finish': 2})
+                            'total': 6,
+                            'finish': 3})
         except  Exception as e:
             print(e)
             print ('ERROR: exception executing Autoarima')
@@ -294,8 +309,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'Holtwinters',
                             'status': temp_info,
-                            'total': 5,
-                            'finish': 3})
+                            'total': 6,
+                            'finish': 4})
 
         except  Exception as e:
             print(e)
@@ -324,8 +339,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'Holtwinters',
                             'status': temp_info,
-                            'total': 5,
-                            'finish': 4})
+                            'total': 6,
+                            'finish': 5})
 
         except  Exception as e:
                print(e)
@@ -338,8 +353,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             self.update_state(state='PROGRESS',
                       meta={'running': 'anomaly_AutoArima',
                             'status': temp_info,
-                            'total': 5,
-                            'finish': 5})
+                            'total': 6,
+                            'finish': 6})
         except Exception as e:
             print(e)
             print ('ERROR: exception executing LSTM univariate')
@@ -370,6 +385,9 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
 #    return merge_two_dicts(engines_output[winner] , temp)
     salida = merge_two_dicts(engines_output[winner], temp_info)
+    finishtime = datetime.now()
+    diff_time = starttime - finishtime
+    salida['time']= diff_time.total_seconds()
     salida['winner'] = winner
     salida['trend']= trendline(lista_datos)
     salida_temp= {}
@@ -379,9 +397,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     salida_temp['finish'] =5
     salida_temp['result'] ='Task completed'
 
-    finishtime = datetime.now()
-    diff_time = starttime - finishtime
-    salida_temp['time']= diff_time.total_seconds()
+
     return  salida_temp
 
 

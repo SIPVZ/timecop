@@ -18,7 +18,7 @@ class engine_output_creation:
   def __init__(self, engine_name):
     self.engine_name = engine_name
     self.engine_output={}
-    self.engine_output['engine']='fbprophet'
+    self.engine_output['engine']=engine_name
 
 
   def alerts_creation(self,forecasted_list , df_test):
