@@ -26,7 +26,7 @@ def anomaly_gluonts(lista_datos,num_fut,desv_mse=0,train=True,name='model-name')
         freq="5min"
     )
 
-    trainer = Trainer(epochs=10)
+    trainer = Trainer(epochs=15)
     estimator = deepar.DeepAREstimator(freq="5min", prediction_length=len(df_test['valores']), trainer=trainer)
     predictor = estimator.train(training_data=dataset)
 
@@ -51,7 +51,7 @@ def anomaly_gluonts(lista_datos,num_fut,desv_mse=0,train=True,name='model-name')
         freq="5min"
     )
 
-    trainer = Trainer(epochs=10)
+    trainer = Trainer(epochs=15)
     estimator = deepar.DeepAREstimator(freq="5min", prediction_length=num_fut, trainer=trainer)
     predictor = estimator.train(training_data=dataset)
 
