@@ -20,3 +20,4 @@ tbats
 celery
 redis
 h5py
+lunarcalendar
