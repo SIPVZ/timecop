@@ -21,3 +21,4 @@ celery
 redis
 h5py
 lunarcalendar
+holidays
