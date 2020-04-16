@@ -1,5 +1,5 @@
 import ruptures as rpt
-import pandas as import pd
+import pandas as  pd
 import numpy as np
 
 def find_changepoints(lista_datos):
