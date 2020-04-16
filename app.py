@@ -17,6 +17,8 @@ from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 from engines.fbprophet import anomaly_fbprophet
 from engines.gluonts import anomaly_gluonts
+from engines.changepointdetection import find_changepoints
+
 
 from datetime import datetime
 
