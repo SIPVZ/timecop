@@ -388,6 +388,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     finishtime = datetime.now()
     diff_time = finishtime - starttime
     salida['time']= diff_time.total_seconds()
+    salida['changepoint'] = find_changepoints(lista_datos)
     salida['winner'] = winner
     salida['trend']= trendline(lista_datos)
     salida_temp= {}
