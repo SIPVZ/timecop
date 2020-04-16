@@ -4,7 +4,7 @@ import numpy as np
 
 def find_changepoints(lista_datos):
     #Convert the time series values to a numpy 1D array
-    points=np.array(lista)
+    points=np.array(lista_datos)
 
     #Changepoint detection with the Binary Segmentation search method
     model = "l2"
