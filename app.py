@@ -183,8 +183,8 @@ def univariate_taskstatus(task_id):
     if task.state == 'SUCCESS':
         response = {
             'state': task.state,
-            'current': 4,
-            'total': 4,
+            'current': 6,
+            'total': 6,
             'result': task.info.get('result', ''),
             'status': task.info.get('status', 'Sucessfully'),
             'task_dump': str(task)
@@ -227,7 +227,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     self.update_state(state='PROGRESS',
                       meta={'running': 'LSTM',
                             'status': '',
-                            'total': 4,
+                            'total': 6,
                             'finish': 0 })
     if not train:
 
