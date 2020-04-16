@@ -1,5 +1,6 @@
 import ruptures as rpt
-
+import pandas as import pd
+import numpy as np
 
 def find_changepoints(lista_datos):
     #Convert the time series values to a numpy 1D array
