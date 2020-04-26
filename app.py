@@ -417,7 +417,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         # data_dict = resultado.to_dict("records")
         lista_puntos = np.arange(0, len(lista_datos),1)
         df = pd.DataFrame(list(zip(lista_puntos, lista_datos)), columns = ['step','value'])
-        timecop_db.insert_one({"name":name,"data":jsonify(salida_temp), "ts": df.to_dict(orient='record')})
+        timecop_db.insert_one({"name":name,"data":json.loads(salida_temp), "ts": df.to_dict(orient='record')})
 
     return  salida_temp
 
