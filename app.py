@@ -406,6 +406,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     from pymongo import MongoClient
     import os
     import pandas as pd
+    import numpy as np
 
     timecop_backend = os.getenv('mongodb_backend' )
     if timecop_backend != None:
@@ -414,8 +415,9 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
         mongo_db = client["ts"]
         timecop_db= mongo_db["timecop"]
         # data_dict = resultado.to_dict("records")
+        lista_puntos = np.arange(0, len(lista_datos),1)
         df = pd.DataFrame(list(zip(lista_puntos, lista_datos)), columns = ['step','value'])
-        timecop_db.insert_one({"name":name,"data":salida_temp, "ts": df.to_dict(orient='record')})
+        timecop_db.insert_one({"name":name,"data":jsonify(salida_temp), "ts": df.to_dict(orient='record')})
 
     return  salida_temp
 
