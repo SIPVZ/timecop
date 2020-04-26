@@ -410,8 +410,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     if timecop_backend != None:
         client = MongoClient(timecop_backend)
         # database
-        db = client["ts"]
-        timecop_db= db["timecop"]
+        mongo_db = client["ts"]
+        timecop_db= mongo_db["timecop"]
         # data_dict = resultado.to_dict("records")
         df = pd.DataFrame(list(zip(lista_puntos, lista_datos)), columns = ['step','value'])
         timecop_db.insert_one({"name":name,"data":salida_temp, "ts": df.to_dict(orient='record')})
