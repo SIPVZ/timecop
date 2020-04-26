@@ -78,7 +78,7 @@ class engine_output_creation:
 
 
   def debug_creation (self, trained_data, df_test):
-    testing_data  = pd.DataFrame(trained_data,index = df_test.index) #,columns=['expected value'])
+    testing_data  = pd.DataFrame(trained_data,index = df_test.index,columns=['value']) #,columns=['expected value'])
     testing_data.rename(columns={"yhat": "expected value"},inplace=True)
 
     testing_data['step']=testing_data.index
