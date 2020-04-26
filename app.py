@@ -401,6 +401,21 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     salida_temp['result'] ='Task completed'
 
 
+    # insert json output to mongodb
+    import pymongo
+    from pymongo import MongoClient
+    import os
+
+    timecop_backend = os.getenv('mongodb_backend' )
+    if timecop_backend != None:
+        client = MongoClient(timecop_backend)
+        # database
+        db = client["ts"]
+        timecop_db= db["timecop"]
+        # data_dict = resultado.to_dict("records")
+        df = pd.DataFrame(list(zip(lista_puntos, lista_datos)), columns = ['step','value'])
+        timecop_db.insert_one({"name":name,"data":salida_temp}, "ts": df.to_dict(orient='record'))
+
     return  salida_temp
 
 
