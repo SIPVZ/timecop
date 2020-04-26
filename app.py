@@ -405,6 +405,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     import pymongo
     from pymongo import MongoClient
     import os
+    import pandas as pd
 
     timecop_backend = os.getenv('mongodb_backend' )
     if timecop_backend != None:
