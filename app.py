@@ -542,7 +542,7 @@ def  back_multivariate_engine():
     #return jsonify(salida), 201
 
     print ("invoco el backend")
-    salida = back_model_multivariate.s(lista_datos=list_var,num_fut=num_fut,desv_mse=desv_mae,train=train,name=name).apply_async()
+    salida = back_model_multivariate.s(list_var=list_var,num_fut=num_fut,desv_mse=desv_mae,train=train,name=name).apply_async()
 
     print (salida.id)
 
@@ -621,10 +621,18 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
 
     engines_output={}
     debug = {}
+    temp_info = {}
 
     try:
         engines_output['LSTM'] = anomaly_LSTM(list_var,num_fut,desv_mse)
         debug['LSTM'] = engines_output['LSTM']['debug']
+        temp_info['LSTM']=engines_output['LSTM']
+        self.update_state(state='PROGRESS',
+            meta={'running': 'VAR',
+                'status': temp_info,
+                'total': 2,
+                'finish': 1})
+        
         print (engines_output['LSTM'])
     except   Exception as e:
         print(e)
@@ -633,11 +641,16 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
     try:
         engines_output['VAR'] = anomaly_VAR(list_var,num_fut)
         debug['VAR'] = engines_output['VAR']['debug']
+        temp_info['VAR']=engines_output['VAR']
+        self.update_state(state='PROGRESS',
+            meta={'running': 'VAR',
+                'status': temp_info,
+                'total': 2,
+                'finish': 2})
         print (engines_output['VAR'])
     except   Exception as e:
         print(Exception)
         print("type error: " + str(e))
-        print(traceback.format_exc())
         print ('ERROR: exception executing VAR')
 
     best_mae=999999999

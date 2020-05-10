@@ -484,7 +484,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 
 
 
-def anomaly_LSTM(list_var,num_fut=10,desv_mae=2):
+def anomaly_LSTM(list_var,num_forecast=10,desv_mse=2):
 
     df_var = pd.DataFrame()
     for i in range(len(list_var)):
@@ -513,7 +513,7 @@ def anomaly_LSTM(list_var,num_fut=10,desv_mae=2):
     #print ('shape x_test',x_test.shape)
 
     window_size = 1
-    num_fore = num_forecast + 1
+    num_fore = num_fut + 1
 
     win_train_x, win_train_y = [], []
     for i in range(len(x_train) - window_size - 1):
@@ -543,8 +543,8 @@ def anomaly_LSTM(list_var,num_fut=10,desv_mae=2):
 
     models_dict = {}
     n_hlayers = [1, 2, 3]
-    n_nodes = [100, 300, 500,700]
-    n_dropout = [0, 0.1, 0.15, 0.20]
+    n_nodes = [100, 300, 700]
+    n_dropout = [0, 0.1, 0.20]
 
     #pruebas
     #n_hlayers = [1]
