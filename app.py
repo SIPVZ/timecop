@@ -617,6 +617,12 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
     debug = {}
     temp_info = {}
 
+    self.update_state(state='PROGRESS',
+        meta={'running': 'LSTM',
+            'status': temp_info,
+            'total': 2,
+            'finish': 2})
+
     try:
         engines_output['LSTM'] = anomaly_LSTM(list_var,num_fut,desv_mse)
         debug['LSTM'] = engines_output['LSTM']['debug']
@@ -666,7 +672,7 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
     #return merge_two_dicts(engines_output[winner] , temp)
     salida = merge_two_dicts(engines_output[winner], temp_info)
     salida['winner'] = winner
-    salida['trend']= trendline(lista_datos)
+    salida['trend']= trendline(list_var[0])
     salida_temp= {}
     salida_temp['status'] = salida
     salida_temp['current'] = 100
