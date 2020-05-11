@@ -560,25 +560,29 @@ def multivariate_taskstatus(task_id):
     print ("llega aqui")
     print (task)
 
+
     if task.state == 'PENDING':
         response = {
-            'state': task.state,
+            'state': 'Pending',
             'current': 0,
             'total': 1,
-            'status': 'Pending...'
+            'status': 'Pending...',
+            'result': 'Pending'
         }
     if task.state == 'PROGRESS':
         response = {
             'state': task.state,
-            'current': 0,
-            'total': 1,
-            'status': task.info.get('status', 'Running...')
+            'current': task.info.get('current', 0),
+            'total': task.info.get('total', 1),
+            'status': task.info.get('status', ''),
+            'result': task.info.get('result', ''),
+            'response': task.info
         }
     if task.state == 'SUCCESS':
         response = {
             'state': task.state,
-            'current': 4,
-            'total': 4,
+            'current': 6,
+            'total': 6,
             'result': task.info.get('result', ''),
             'status': task.info.get('status', 'Sucessfully'),
             'task_dump': str(task)
@@ -590,7 +594,7 @@ def multivariate_taskstatus(task_id):
         #     print ("el result NO aparece en el SUCCESS")
 
 
-    elif task.state != 'FAILURE':
+    elif task.state == 'FAILURE':
         response = {
             'state': task.state,
             'current': task.info.get('current', 0),
@@ -598,16 +602,6 @@ def multivariate_taskstatus(task_id):
             'status': task.info.get('status', ''),
             'result': task.info.get('result', ''),
             'response': task.info
-        }
-    else:
-
-        # something went wrong in the background job
-        response = {
-            'state': task.state,
-            'current': 1,
-            'total': 1,
-            'status': str(task.info),  # this is the exception raised
-            'result': task.info
         }
     print (task.state)
     print(task.info)

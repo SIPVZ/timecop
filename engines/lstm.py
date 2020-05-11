@@ -513,7 +513,7 @@ def anomaly_LSTM(list_var,num_forecast=10,desv_mse=2):
     #print ('shape x_test',x_test.shape)
 
     window_size = 1
-    num_fore = num_fut + 1
+    num_fore = num_forecast + 1
 
     win_train_x, win_train_y = [], []
     for i in range(len(x_train) - window_size - 1):
