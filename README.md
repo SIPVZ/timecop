@@ -35,6 +35,7 @@ To use TIMECOP engine you will need to send a univariate or multivariate time se
 - [x] Gluon-ts
 - [x] Holtwinters
 - [x] ARIMA
+- [ ] TBATS
 
     
 #### Multivariate
