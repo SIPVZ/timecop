@@ -26,6 +26,19 @@ To use TIMECOP engine you will need to send a univariate or multivariate time se
 
 ![alt text](https://raw.githubusercontent.com/BBVA/timecop/master/doc/img/flow_chart.jpg)
 
+## Main Features
+- [x] **Future**: Forecast n steps
+- [x] **Past**: Sensibility custom anomaly detection
+- [x] **Now**: Sensibility custom anomaly detection
+
+#### Secondary Features
+- [x] Delta / Full timesteps upload
+- [x] Train / Use best known model in production envirotnment
+- [x] Python API for easy integration in notebooks / python apps 
+- [x] Backend Database 
+
+
+
 ## Algorithms
 #### Univariate
 
@@ -49,6 +62,12 @@ To use TIMECOP engine you will need to send a univariate or multivariate time se
 - [x] Mean Squeared Error
 - [x] Root Mean Squeared Error
 - [x] Symmetric mean absolute percentage error
+- [x] Mean Absolute Percentage Error
+
+
+## Advanced features
+- [x] Trend
+- [x] ChangePoints
 - [ ] Confidence interval
 
 
