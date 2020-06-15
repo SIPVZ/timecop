@@ -17,6 +17,8 @@ from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 from engines.fbprophet import anomaly_fbprophet
 from engines.gluonts import anomaly_gluonts
+from engines.nbeats import anomaly_nbeats
+
 from engines.changepointdetection import find_changepoints
 
 
@@ -251,6 +253,22 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
             print ("Error")
 
     else:
+
+
+
+
+        try:
+            engines_output['nbeats'] = anomaly_nbeats(lista_datos,num_fut,desv_mse,train,name)
+            debug['nbeats'] = engines_output['nbeats']['debug']
+            temp_info['nbeats']=engines_output['nbeats']
+            self.update_state(state='PROGRESS',
+                      meta={'running': 'nbeats',
+                            'status': temp_info,
+                            'total': 7,
+                            'finish': 1})
+        except Exception as e:
+
+            print ('ERROR: nbeats univariate: ' + str(e) )
 
 
 
@@ -632,7 +650,7 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
                 'status': temp_info,
                 'total': 2,
                 'finish': 1})
-        
+
         print (engines_output['LSTM'])
     except   Exception as e:
         print(e)
