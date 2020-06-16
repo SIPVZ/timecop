@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import pmdarima as pm
 from sklearn.metrics import mean_squared_error,mean_absolute_error
-from . helpers import create_train_test
+from . helpers import create_train_test, reshape_array
 import pickle
 from datetime import datetime
 import pandas as pd
@@ -30,7 +30,6 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     for i in range(backcast_length, len(lista_puntos) - forecast_length):
         x_train_batch.append(lista_puntos[i - backcast_length:i])
         y.append(lista_puntos[i:i + forecast_length])
-        print (x_train_batch)
 
         #x_train_batch = np.array(x_train_batch)[..., 0]
         #y = np.array(y)[..., 0]
@@ -43,6 +42,15 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     x_train, y_train = x_train_batch[:c], y[:c]
     x_test, y_test = x_train_batch[c:], y[c:]
 
+
+    y_test_output = []
+    for elemento in np.arange(0,len(y_test)):
+      y_test_output.append(y_test[elemento,0])
+    print (y_test_output)
+    df_test_2 = pd.DataFrame()
+    df_test_2['valores'] = y_test_output
+    df_test_2['puntos'] = np.arange(c,len(y_test_output)+c)
+    df_test_2= df_test_2.set_index('puntos',drop=False)
 
     x_train = reshape_array(x_train)
     y_train = reshape_array(y_train)
@@ -65,7 +73,7 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
 
 
     # Train the model.
-    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=300, batch_size=128)
+    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=30, batch_size=128)
 
     predictions = model.predict(x_test)
 
@@ -73,9 +81,11 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     predict_output = []
     for elemento in np.arange(0,len(y_test)):
         predict_output.append(predictions[elemento,0,0])
-    engine.alerts_creation(predict_output,df_test)
-    engine.debug_creation(predict_output,df_test)
-    engine.metrics_generation( df_test['valores'].values,predict_output)
+    print (len(predict_output))
+    print(len(df_test))
+    engine.alerts_creation(predict_output,df_test_2)
+    engine.debug_creation(predict_output,df_test_2)
+    engine.metrics_generation( df_test_2['valores'].values,predict_output)
 
 
         ############## ANOMALY FINISHED,
@@ -83,5 +93,7 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
         ############## FORECAST START
 
 
-    engine.forecast_creation( predictions2[len(y_test)-1].reshape(forecast_length).tolist(), len(lista_datos),num_fut)
+    print (predictions[len(y_test)-1].reshape(forecast_length).tolist())
+    print (len(lista_datos))
+    engine.forecast_creation( predictions[len(y_test)-1].reshape(forecast_length), len(lista_datos),num_fut)
     return (engine.engine_output)
