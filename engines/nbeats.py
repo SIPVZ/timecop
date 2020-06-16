@@ -73,7 +73,7 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
 
 
     # Train the model.
-    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=30, batch_size=128)
+    model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=500, batch_size=128)
 
     predictions = model.predict(x_test)
 
