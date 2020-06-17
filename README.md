@@ -48,6 +48,7 @@ To use TIMECOP engine you will need to send a univariate or multivariate time se
 - [x] Gluon-ts
 - [x] Holtwinters
 - [x] ARIMA
+- [x] N-beats
 - [ ] TBATS
 
     
@@ -69,6 +70,38 @@ To use TIMECOP engine you will need to send a univariate or multivariate time se
 - [x] Trend
 - [x] ChangePoints
 - [ ] Confidence interval
+
+## Installation
+To use timecop the easiest way is to deploy the docker image made with the last version. The steps to use the docker images are:
+
+## Install docker
+
+Download timecop docker image:
+```
+docker pull trakuo/timecop:devel
+```
+
+Execute a container with the timecop image:
+
+```
+docker run --name timecoprunning -p 3000:80 trakuo/timecop:devel
+```
+
+Open web test page to test timecop is running
+```
+http://localhost:3000/static/index.html
+```
+
+## pip module
+You can use this python module to invoke in any python program timecop forecasting features.
+
+```
+import timecop-timseseries as tc
+test_ts=[1,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9,2,3,4,5,6,7,8,9]
+URL = 'http://localhost:3000/'
+result = tc.timecop_univariate(URL,'ts_name', True, test_ts)
+print(result)
+```
 
 ## Web test page
 
