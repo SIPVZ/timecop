@@ -536,16 +536,18 @@ def  back_multivariate_engine():
 
     lista = timedata['main']
     if(name != 'NA'):
-        filename= './lst/'+name+'.lst'
+
         try:
+            filename= './lst/'+name+'.lst'
             with open(filename, 'r') as filehandle:
                 previousList = json.load(filehandle)
+            lista = previousList + lista
+            with open(filename, 'w') as filehandle:
+                json.dump(lista,filehandle)
+
         except Exception:
             previousList=[]
 
-        lista = previousList + lista
-        with open(filename, 'w') as filehandle:
-            json.dump(lista,filehandle)
 
     list_var.append(lista)
 
