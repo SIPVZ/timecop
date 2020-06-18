@@ -521,8 +521,8 @@ def  back_multivariate_engine():
                 sub_name = item['name']
 
                 filename= './lst/'+name + '_' + sub_name +'.lst'
-                    with open(filename, 'r') as filehandle:
-                        previousList = json.load(filehandle)
+                with open(filename, 'r') as filehandle:
+                    previousList = json.load(filehandle)
 
                 lista = previousList + data
                 with open(filename, 'w') as filehandle:
