@@ -515,20 +515,20 @@ def  back_multivariate_engine():
     list_var=[]
     for item in items:
         data = item['data']
-        if(name != 'NA'):
-            sub_name = item['name']
+        try:
 
-            filename= './lst/'+name + '_' + sub_name +'.lst'
-            try:
-                with open(filename, 'r') as filehandle:
-                    previousList = json.load(filehandle)
-            except Exception:
-                previousList=[]
+            if(name != 'NA'):
+                sub_name = item['name']
 
-            lista = previousList + data
-            with open(filename, 'w') as filehandle:
-                json.dump(lista,filehandle)
+                filename= './lst/'+name + '_' + sub_name +'.lst'
+                    with open(filename, 'r') as filehandle:
+                        previousList = json.load(filehandle)
 
+                lista = previousList + data
+                with open(filename, 'w') as filehandle:
+                    json.dump(lista,filehandle)
+        except Exception:
+            previousList=[]
 
         list_var.append(data)
 
