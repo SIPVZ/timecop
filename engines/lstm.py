@@ -218,55 +218,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
                             model.save('./models_temp/lstm.model.temp.'+name+model_name+'.h5')
                             best_model=model
 
-
-
-        #####getting best model
-    #     #dict_eval_models = {}
-    #     dict_mse_models = {}
-    #     for model in models_dict:
-    # #        print 'fit model {}'.format(model)
-    #         try:
-    #             seed(69)
-    #             #name_model = models_dict[model].fit(win_train_x, win_train_y, epochs=25, verbose=0, shuffle=False)
-    #             models_dict[model].fit(win_train_x, win_train_y, epochs=25, verbose=0, shuffle=False)
-    #             #dict_eval_models[model] = name_model
-    #         except:
-    #             dict_eval_models[model] = 'Error'
-    #
-    #
-    #         print(model)
-    #         yhat = models_dict[model].predict(new_test_x)
-    #         yhat_test = yhat[:,0]
-    #
-    #         temp_res= pd.DataFrame(yhat_test,columns=['values'])
-    #         temp_res = np.array(temp_res)
-    #         y_yhat_inv = scaler_x.inverse_transform(temp_res)
-    #         y_yhat_inv= y_yhat_inv[:,0]
-    #
-    #         temp_x_test= pd.DataFrame(x_test,columns=['values'])
-    #         temp_x_test = np.array(temp_x_test)
-    #         x_test_inv = scaler_x.inverse_transform(temp_x_test)
-    #
-    #         mse = (mean_squared_error(x_test_inv, y_yhat_inv))
-    #         rmse = np.sqrt(mse)
-    #         mae = mean_absolute_error(x_test_inv, y_yhat_inv)
-    #         print ('mse', mse)
-    #         print ('rmse', rmse)
-    #         print ('mae', mae)
-    #         dict_mse_models[model] = mae
-    #         # if mae != min(dict_mse_models, key = dict_mse_models.get):
-    #         #     del dict_mse_models[model]
-    #         #     del models_dict[model]
-    #
-    #     best_model = min(dict_mse_models, key = dict_mse_models.get)
-
-
-        #print('best_model',best_model)
-        #K.clear_session()
-        # for model in models_dict:
-        #     if model != best_model:
-        #         del models_dict[model]
-        #         print ("Model "+ model +" erased")
+   
         print("Finish")
         print("Storing model")
         #best_model.save('./models_temp/lstm.model.new'+name)
@@ -287,7 +239,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         #print("el modelo es")
         #print(model_name)
         #print (mymodel)
-        with open('./models_temp/lstm.model'+name, "wb") as newFile:
+        with open('./models_temp/lstm.model'+name+'.h5', "wb") as newFile:
             newFile.write(mymodel)
             newFile.close()
 
