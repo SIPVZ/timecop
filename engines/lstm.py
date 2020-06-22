@@ -215,7 +215,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
                             best_mae=mae
                             best_model_name=model_name
                             print ("LSTM best new model " + str(mae)+"\n")
-                            model.save('./models_temp/lstm.model.temp.'+name+model_name)
+                            model.save('./models_temp/lstm.model.temp.'+name+model_name+'.h5')
                             best_model=model
 
 
@@ -271,7 +271,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
         print("Storing model")
         #best_model.save('./models_temp/lstm.model.new'+name)
         print ("insertando modelo LSTM")
-        with open('./models_temp/lstm.model.temp.'+name+best_model_name,'rb') as f:
+        with open('./models_temp/lstm.model.temp.'+name+best_model_name+'.h5','rb') as f:
             mymodel = f.read()
 
             new_model(name, 'LSTM', bytearray(mymodel),'',best_mae)
@@ -292,7 +292,7 @@ def anomaly_uni_LSTM(lista_datos,num_forecast=10,desv_mse=2,train='True',name='t
             newFile.close()
 
 
-        actual_model= load_model('./models_temp/lstm.model'+name)
+        actual_model= load_model('./models_temp/lstm.model'+name+'.h5')
 
     print("Starting anomalies")
     yhat = actual_model.predict(new_test_x)
