@@ -18,6 +18,7 @@ from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 from engines.fbprophet import anomaly_fbprophet
 from engines.gluonts import anomaly_gluonts
 from engines.nbeats import anomaly_nbeats
+from engines.vecm import anomaly_vecm
 
 from engines.changepointdetection import find_changepoints
 
@@ -540,12 +541,13 @@ def  back_multivariate_engine():
         try:
             with open(filename, 'r') as filehandle:
                 previousList = json.load(filehandle)
+
+
+            lista = previousList + lista
+            with open(filename, 'w') as filehandle:
+                json.dump(lista,filehandle)
         except Exception:
             previousList=[]
-
-        lista = previousList + lista
-        with open(filename, 'w') as filehandle:
-            json.dump(lista,filehandle)
 
     list_var.append(lista)
 
@@ -655,6 +657,21 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
     except   Exception as e:
         print(e)
         print ('ERROR: exception executing LSTM')
+
+    try:
+        engines_output['VECM'] = anomaly_vecm(list_var,num_fut,desv_mse)
+        debug['VECM'] = engines_output['VECM']['debug']
+        temp_info['VECM']=engines_output['VECM']
+        self.update_state(state='PROGRESS',
+            meta={'running': 'VECM',
+                'status': temp_info,
+                'total': 2,
+                'finish': 1})
+
+        print (engines_output['VECM'])
+    except   Exception as e:
+        print(e)
+        print ('ERROR: exception executing VECM')
 
     try:
         engines_output['VAR'] = anomaly_VAR(list_var,num_fut)
