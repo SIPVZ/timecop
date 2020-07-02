@@ -2,6 +2,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import statsmodels.tsa.vector_ar.vecm as vecm
 import pandas as pd
+from . engine_output_creation import engine_output_creation
+
 
 def anomaly_vecm(list_var,num_fut=5,desv_mse=2,train=True,name='model-name'):
   df_var = pd.DataFrame()
