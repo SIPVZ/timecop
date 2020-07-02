@@ -34,7 +34,7 @@ def anomaly_vecm(list_var,num_fut=5,desv_mse=2,train=True,name='model-name'):
   df_test['puntos']= df_test.index
   df_test['valores'] = df_test[df_var.columns[0]]
 
-  engine.alerts_creation(result,df_test,desv_mse)
+  engine.alerts_creation(result,df_test)
   # # print("empieza")
 
   engine.metrics_generation(df_test[df_test.columns[0]].values, result)
