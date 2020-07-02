@@ -658,20 +658,6 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
         print(e)
         print ('ERROR: exception executing LSTM')
 
-    try:
-        engines_output['VECM'] = anomaly_vecm(list_var,num_fut,desv_mse)
-        debug['VECM'] = engines_output['VECM']['debug']
-        temp_info['VECM']=engines_output['VECM']
-        self.update_state(state='PROGRESS',
-            meta={'running': 'VECM',
-                'status': temp_info,
-                'total': 2,
-                'finish': 1})
-
-        print (engines_output['VECM'])
-    except   Exception as e:
-        print(e)
-        print ('ERROR: exception executing VECM')
 
     try:
         engines_output['VAR'] = anomaly_VAR(list_var,num_fut)
@@ -687,6 +673,21 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
         print(Exception)
         print("type error: " + str(e))
         print ('ERROR: exception executing VAR')
+
+    try:
+        engines_output['VECM'] = anomaly_vecm(list_var,num_fut,desv_mse)
+        debug['VECM'] = engines_output['VECM']['debug']
+        temp_info['VECM']=engines_output['VECM']
+        self.update_state(state='PROGRESS',
+            meta={'running': 'VECM',
+                'status': temp_info,
+                'total': 2,
+                'finish': 1})
+
+        print (engines_output['VECM'])
+    except   Exception as e:
+        print(e)
+        print ('ERROR: exception executing VECM')
 
     best_mae=999999999
     winner='LSTM'

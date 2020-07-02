@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import statsmodels.tsa.vector_ar.vecm as vecm
 import pandas as pd
 
-def anomaly_vecm(lista_var,num_fut=5,desv_mse=2,train=True,name='model-name'):
+def anomaly_vecm(list_var,num_fut=5,desv_mse=2,train=True,name='model-name'):
   df_var = pd.DataFrame()
   for i in range(len(list_var)):
         df_var['var_{}'.format(i)] = list_var[i]
