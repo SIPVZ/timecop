@@ -95,5 +95,5 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
 
     print (predictions[len(y_test)-1].reshape(forecast_length).tolist())
     print (len(lista_datos))
-    engine.forecast_creation( predictions[len(y_test)-1].reshape(forecast_length), len(lista_datos),num_fut)
+    engine.forecast_creation( predictions[len(y_test)-1].reshape(forecast_length).tolist(), len(lista_datos),num_fut)
     return (engine.engine_output)
