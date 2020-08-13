@@ -239,7 +239,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
 
     counter = 0
-    for engine_name, engine_function in engines:
+    for engine_name, engine_function in engines.items():
         self.update_state(state='PROGRESS',
                           meta={'running': engine_name,
                                 'status': temp_info,
