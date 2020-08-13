@@ -221,7 +221,7 @@ def univariate_taskstatus(task_id):
 @celery.task(bind=True)
 def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     engines = {'LSTM': 'anomaly_uni_LSTM(lista_datos,num_fut,desv_mse,train,name)',
-                'VAR': 'univariate_forecast_VAR(lista_datos,num_fut,name)',
+                'VAR': 'univariate_anomaly_VAR(lista_datos,num_fut,name)',
                 'nbeats': 'anomaly_nbeats(lista_datos,num_fut,desv_mse,train,name)',
                 'gluonts': 'anomaly_gluonts(lista_datos,num_fut,desv_mse,train,name)',
                 'fbprophet': 'anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)',

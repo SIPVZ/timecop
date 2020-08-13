@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import pmdarima as pm
 from sklearn.metrics import mean_squared_error,mean_absolute_error
 from . helpers import create_train_test
 import pickle
@@ -44,6 +43,6 @@ def anomaly_fbprophet(lista_datos,num_fut,desv_mse=0,train=True,name='model-name
 
     engine.forecast_creation( forecast[-num_fut:]['yhat'].tolist(), len(lista_datos),num_fut)
     engine.metrics_generation( df_test['valores'].values, forecast[-len(df_test['valores']):]['yhat'])
-    engine.debug_creation(forecast[-len(df['valores']):]['yhat'].tolist(),df_test)
+    engine.debug_creation(forecast[-len(df_test['valores']):]['yhat'].tolist(),df_test)
 
     return (engine.engine_output)

@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import pmdarima as pm
 from sklearn.metrics import mean_squared_error,mean_absolute_error
 from . helpers import create_train_test
 import pickle
