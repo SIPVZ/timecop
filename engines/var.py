@@ -5,6 +5,8 @@ import pyflux as pf
 #from helpers import helpers as h
 from . BBDD import new_model, get_best_model
 from struct import *
+import pickle
+
 
 
 def univariate_anomaly_VAR(lista_datos,num_fut,name):

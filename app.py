@@ -18,6 +18,7 @@ from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
 from engines.fbprophet import anomaly_fbprophet
 from engines.gluonts import anomaly_gluonts
 from engines.nbeats import anomaly_nbeats
+from engines.vecm import anomaly_vecm
 
 from engines.changepointdetection import find_changepoints
 
@@ -541,6 +542,7 @@ def  back_multivariate_engine():
             filename= './lst/'+name+'.lst'
             with open(filename, 'r') as filehandle:
                 previousList = json.load(filehandle)
+<<<<<<< HEAD
             lista = previousList + lista
             with open(filename, 'w') as filehandle:
                 json.dump(lista,filehandle)
@@ -549,6 +551,16 @@ def  back_multivariate_engine():
             previousList=[]
 
 
+=======
+
+
+            lista = previousList + lista
+            with open(filename, 'w') as filehandle:
+                json.dump(lista,filehandle)
+        except Exception:
+            previousList=[]
+
+>>>>>>> f00d9116a8d4d89f52590db81912631b98a0f8a1
     list_var.append(lista)
 
     num_fut = int(timedata.get('num_future', 5))
@@ -658,6 +670,7 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
         print(e)
         print ('ERROR: exception executing LSTM')
 
+
     try:
         engines_output['VAR'] = anomaly_VAR(list_var,num_fut)
         debug['VAR'] = engines_output['VAR']['debug']
@@ -672,6 +685,21 @@ def back_model_multivariate(self, list_var,num_fut,desv_mse,train=True,name='Tes
         print(Exception)
         print("type error: " + str(e))
         print ('ERROR: exception executing VAR')
+
+    try:
+        engines_output['VECM'] = anomaly_vecm(list_var,num_fut,desv_mse)
+        debug['VECM'] = engines_output['VECM']['debug']
+        temp_info['VECM']=engines_output['VECM']
+        self.update_state(state='PROGRESS',
+            meta={'running': 'VECM',
+                'status': temp_info,
+                'total': 2,
+                'finish': 1})
+
+        print (engines_output['VECM'])
+    except   Exception as e:
+        print(e)
+        print ('ERROR: exception executing VECM')
 
     best_mae=999999999
     winner='LSTM'
