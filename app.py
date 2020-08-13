@@ -237,9 +237,15 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     starttime = datetime.now()
 
 
+    # Holtwinters workaround, must to solve
+    if (len(lista_datos) > 2000):
+
+        lista_datos_holt=lista_datos[len(lista_datos)-2000:]
+    else:
+        lista_datos_holt = lista_datos
 
     counter = 0
-    for engine_name, engine_function in engines.items():
+    for engine_name, engine_function in engines.items() :
         self.update_state(state='PROGRESS',
                           meta={'running': engine_name,
                                 'status': temp_info,
