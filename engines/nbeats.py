@@ -54,6 +54,7 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     df_test_2['puntos'] = np.arange(basic,len(y_test_output)+basic)
     df_test_2= df_test_2.set_index('puntos',drop=False)
 
+
     x_train = reshape_array(x_train)
     y_train = reshape_array(y_train)
     x_test = reshape_array(x_test)
