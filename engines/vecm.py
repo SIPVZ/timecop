@@ -10,7 +10,7 @@ def anomaly_vecm(list_var,num_fut=5,desv_mse=2,train=True,name='model-name'):
   for i in range(len(list_var)):
         df_var['var_{}'.format(i)] = list_var[i]
 
-  #split 
+  # split 
   tam_train = int(len(df_var)*0.7)
   #print tam_train
   df_train = df_var[:tam_train]
