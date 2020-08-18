@@ -15,7 +15,7 @@ def anomaly_tcn(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     # lista_puntos = np.arange(lookback_window-1, len(lista_datos)+ lookback_window -1,1)
     # df, df_train, df_test = create_train_test(lista_puntos, lista_datos)
 
-    
+
 
     x, y = [], []
     for i in range(lookback_window, len(lista_datos)):
@@ -53,6 +53,7 @@ def anomaly_tcn(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     df_test = pd.DataFrame()
     df_test['valores'] = lista_datos[train_part+lookback_window:]
     df_test['puntos'] = np.arange(train_part+lookback_window-1, len(lista_datos)-1)
+    df_test = df_test.set_index('puntos')
     engine = engine_output_creation('tcn')
     engine.alerts_creation(p.reshape(len(y_test)),df_test)
     engine.debug_creation(p.tolist(),df_test)
