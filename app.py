@@ -19,6 +19,7 @@ from engines.fbprophet import anomaly_fbprophet
 from engines.gluonts import anomaly_gluonts
 from engines.nbeats import anomaly_nbeats
 from engines.vecm import anomaly_vecm
+from engines.tcn import anomaly_tcn
 
 from engines.changepointdetection import find_changepoints
 
@@ -226,7 +227,8 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
                 'gluonts': 'anomaly_gluonts(lista_datos,num_fut,desv_mse,train,name)',
                 'fbprophet': 'anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)',
                 'arima': 'anomaly_AutoArima(lista_datos,num_fut,desv_mse,train,name)',
-                'Holtwinters': 'anomaly_holt(lista_datos_holt,num_fut,desv_mse,name)'
+                'Holtwinters': 'anomaly_holt(lista_datos_holt,num_fut,desv_mse,name)',
+                'tcn': 'anomaly_tcn(lista_datos,num_fut,desv_mse,train,name)'
                 }
 
     engines_output={}
