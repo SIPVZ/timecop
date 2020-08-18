@@ -15,7 +15,6 @@ def anomaly_tcn(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     # lista_puntos = np.arange(lookback_window-1, len(lista_datos)+ lookback_window -1,1)
     # df, df_train, df_test = create_train_test(lista_puntos, lista_datos)
 
-    print (df.head())
     
 
     x, y = [], []
