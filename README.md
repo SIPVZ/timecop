@@ -34,8 +34,8 @@ To use TIMECOP engine you will need to send a univariate or multivariate time se
 #### Secondary Features
 - [x] Delta / Full timesteps upload
 - [x] Train / Use best known model in production envirotnment
-- [x] Python API for easy integration in notebooks / python apps 
-- [x] Backend Database 
+- [x] Python API for easy integration in notebooks / python apps
+- [x] Backend Database
 
 
 
@@ -49,9 +49,10 @@ To use TIMECOP engine you will need to send a univariate or multivariate time se
 - [x] Holtwinters
 - [x] ARIMA
 - [x] N-beats
+- [x] Temporal Convolutional Network
 - [ ] TBATS
 
-    
+
 #### Multivariate
 - [x] Long Short Term Memory networks
 - [x] vector autoregression
