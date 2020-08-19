@@ -811,7 +811,11 @@ def result_list():
     timedata = request.get_json()
     collection_ts = timedata.get('collection', 'NA')
     database = timedata.get('database', 'NA')
-    url = timedata.get('url', 'NA')
+    timecop_mongo_URL = os.getenv('mongodb_URL' )
+    if timecop_mongo_URL != None:
+        url = timecop_mongo_URL
+    else:
+        url = timedata.get('url', 'NA')
     ###"mongodb://username:pwd@ds261570.mlab.com:61570/ts?retryWrites=false"
 
     import pandas as pd
