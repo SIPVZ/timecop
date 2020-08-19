@@ -811,6 +811,8 @@ def result_list():
     timedata = request.get_json()
     collection_ts = timedata.get('collection', 'NA')
     database = timedata.get('database', 'NA')
+    timecop_backend = os.getenv('mongodb_backend' )
+
     if timecop_backend != None:
         url = timecop_backend
     else:
