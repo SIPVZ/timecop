@@ -11,7 +11,7 @@ from celery import Celery
 
 # import engines functions_timeseries
 from engines.helpers import merge_two_dicts,trendline
-from engines.var import anomaly_VAR, univariate_anomaly_VAR,univariate_forecast_VAR
+from engines.var import anomaly_VAR, univariate_anomaly_VAR,univariate_forecast_VAR,anomaly_var
 from engines.holtwinter import anomaly_holt,forecast_holt
 from engines.auto_arima import anomaly_AutoArima
 from engines.lstm import anomaly_LSTM, anomaly_uni_LSTM
@@ -222,7 +222,7 @@ def univariate_taskstatus(task_id):
 @celery.task(bind=True)
 def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
     engines = {'LSTM': 'anomaly_uni_LSTM(lista_datos,num_fut,desv_mse,train,name)',
-                'VAR': 'univariate_anomaly_VAR(lista_datos,num_fut,name)',
+                'VAR': 'anomaly_var(lista_datos,num_fut,desv_mse=0,train,name)',
                 'nbeats': 'anomaly_nbeats(lista_datos,num_fut,desv_mse,train,name)',
                 'gluonts': 'anomaly_gluonts(lista_datos,num_fut,desv_mse,train,name)',
                 'fbprophet': 'anomaly_fbprophet(lista_datos,num_fut,desv_mse,train,name)',
