@@ -841,12 +841,16 @@ def result_document():
         from bson import json_util
         timedata = request.get_json()
         database = timedata.get('database', 'NA')
-        url = timedata.get('url', 'NA')
+        # url = timedata.get('url', 'NA')
         input_name = timedata.get('name','NA')
         collection_ts = timedata.get('collection_ts','ts')
         collection_timecop = timedata.get('collection_timecop','timecop')
         ###"mongodb://username:pwd@ds261570.mlab.com:61570/ts?retryWrites=false"
 
+        if timecop_backend != None:
+            url = timecop_backend
+        else:
+            url = timedata.get('url', 'NA')
         import pymongo
         from pymongo import MongoClient
         # Making a Connection with MongoClient
