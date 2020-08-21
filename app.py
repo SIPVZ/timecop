@@ -847,6 +847,8 @@ def result_document():
         collection_timecop = timedata.get('collection_timecop','timecop')
         ###"mongodb://username:pwd@ds261570.mlab.com:61570/ts?retryWrites=false"
 
+        timecop_backend = os.getenv('mongodb_backend' )
+
         if timecop_backend != None:
             url = timecop_backend
         else:
