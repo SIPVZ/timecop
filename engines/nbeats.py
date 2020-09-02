@@ -27,9 +27,9 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
 
 
     x_train_batch, y = [], []
-    for i in range(backcast_length, len(lista_puntos) - forecast_length):
-        x_train_batch.append(lista_puntos[i - backcast_length:i])
-        y.append(lista_puntos[i:i + forecast_length])
+    for i in range(backcast_length, len(lista_datos) - forecast_length):
+        x_train_batch.append(lista_datos[i - backcast_length:i])
+        y.append(lista_datos[i:i + forecast_length])
 
         #x_train_batch = np.array(x_train_batch)[..., 0]
         #y = np.array(y)[..., 0]
@@ -49,8 +49,11 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
     print (y_test_output)
     df_test_2 = pd.DataFrame()
     df_test_2['valores'] = y_test_output
-    df_test_2['puntos'] = np.arange(c,len(y_test_output)+c)
+    basic = c + num_fut*12 + num_fut
+
+    df_test_2['puntos'] = np.arange(basic,len(y_test_output)+basic)
     df_test_2= df_test_2.set_index('puntos',drop=False)
+
 
     x_train = reshape_array(x_train)
     y_train = reshape_array(y_train)
@@ -95,5 +98,5 @@ def anomaly_nbeats(lista_datos,num_fut,desv_mse=0,train=True,name='model-name'):
 
     print (predictions[len(y_test)-1].reshape(forecast_length).tolist())
     print (len(lista_datos))
-    engine.forecast_creation( predictions[len(y_test)-1].reshape(forecast_length), len(lista_datos),num_fut)
+    engine.forecast_creation( predictions[len(y_test)-1].reshape(forecast_length).tolist(), len(lista_datos),num_fut)
     return (engine.engine_output)
