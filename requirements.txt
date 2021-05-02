@@ -10,7 +10,7 @@ pmdarima
 scikit_learn
 pickle-mixin
 bson
-pymongo
+pymongo[srv]
 scipy
 patsy
 numdifftools
