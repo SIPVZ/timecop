@@ -9,7 +9,7 @@ import pandas as pd
 from . engine_output_creation import engine_output_creation
 from gluonts.dataset import common
 from gluonts.model import deepar
-from gluonts.trainer import Trainer
+from gluonts.mx.trainer import Trainer
 from gluonts.dataset.common import ListDataset
 
 
