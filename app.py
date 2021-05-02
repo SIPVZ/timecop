@@ -494,7 +494,7 @@ def back_model_univariate(self, lista_datos,num_fut,desv_mse,train,name):
 
     timecop_backend = os.getenv('mongodb_backend' )
     if timecop_backend != None:
-        client = MongoClient(timecop_backend)
+        client = MongoClient(timecop_backend, ssl_cert_reqs=ssl.CERT_NONE)
         # database
         mongo_db = client["ts"]
         timecop_db= mongo_db["timecop"]
