@@ -16,4 +16,4 @@ service redis-server start
 sleep 10;
 
 
-cd /app; celery -A app.celery &
+cd /app; celery -A app.celery worker --loglevel=INFO &
