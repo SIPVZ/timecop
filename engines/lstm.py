@@ -494,8 +494,8 @@ def anomaly_LSTM(list_var,num_forecast=10,desv_mse=2):
     ##################neural network######################
 
     models_dict = {}
-    n_hlayers = [1, 2, 3]
-    n_nodes = [100, 300, 700]
+    n_hlayers = [1, 3]
+    n_nodes = [100, 300, 500]
     n_dropout = [0, 0.1, 0.20]
 
     #pruebas
